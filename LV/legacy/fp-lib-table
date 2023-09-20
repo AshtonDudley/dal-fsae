@@ -1,0 +1,4 @@
+(fp_lib_table
+  (lib (name "Footprints")(type "KiCad")(uri "C:/Users/Mitch/Dalhousie University/DalFSAE - Documents/Drivetrain/4- Electrical Control/Schematics/Footprints")(options "")(descr ""))
+  (lib (name "39-28-9128")(type "Legacy")(uri "C:/Users/Mitch/Dalhousie University/DalFSAE - Documents/Drivetrain/4- Electrical Control/Schematics/Footprints/39-28-9128/KiCad/39-28-9128.mod")(options "")(descr ""))
+)
