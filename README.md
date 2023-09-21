@@ -1,2 +1,2 @@
-# dal-fsae
-Dalhousie FSAE Electrical Repository 
+# Dalhousie Formula SAE Electrical Team
+Dalhousie FSAE Electrical Team Repository 
