@@ -1,0 +1,6 @@
+{
+    "files.associations": {
+        "lcd1602.h": "c",
+        "stm32f4xx.h": "c"
+    }
+}
