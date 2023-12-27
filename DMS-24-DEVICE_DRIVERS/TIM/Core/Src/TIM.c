@@ -6,15 +6,19 @@
  */
 
 
+#include "stm32f4xx_hal.h"
 #include "TIM.h"
-#include "stm32f4xx.h"
 
-float TIM_ConvertValue(uint16_t inputValue);
+
+#define ADC_BUFFER_LEN 4096
+uint16_t adc_buf[ADC_BUFFER_LEN];
+
+
 
 
 /**
  * @brief Throttle Input Module
- * @retval None
+ * @return Throttle value scaled to desired map
  */
 float TIM_ConvertValue(uint16_t  inputValue)
 {
@@ -35,3 +39,26 @@ float TIM_ConvertValue(uint16_t  inputValue)
 	float outputValue = y1 + (inputValue - x1) * ((y1 - y0) / (x1 - x0)); // Linear Approximation
 	return outputValue;
 }
+
+void TIM_Init(ADC_HandleTypeDef *TIM_hadc1){
+	HAL_ADC_Start_DMA(TIM_hadc1, (uint32_t*)adc_buf, ADC_BUFFER_LEN);
+}
+
+/**
+  * @brief  This function is executed when half the TIM buffer is full
+  * @retval None
+  */
+void HAL_ADC_ConvHalfCpltCallback(ADC_HandleTypeDef* hadc1){
+	HAL_GPIO_WritePin(GPIOD, GPIO_PIN_12, GPIO_PIN_SET);
+}
+
+
+/**
+  * @brief  This function is executed when  TIM buffer is completely full
+  * @retval None
+  */
+void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc1){
+	HAL_GPIO_WritePin(GPIOD, GPIO_PIN_12, GPIO_PIN_RESET);
+
+}
+

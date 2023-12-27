@@ -10,4 +10,9 @@
 
 
 
+void TIM_Init(ADC_HandleTypeDef *TIM_hadc1);
+
+float TIM_ConvertValue(uint16_t inputValue);
+
+
 #endif /* SRC_TIM_H_ */
