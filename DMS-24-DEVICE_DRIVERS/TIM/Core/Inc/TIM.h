@@ -16,5 +16,6 @@ uint16_t TIM_ConvertValue(uint16_t inputValue);
 
 uint16_t TIM_Average(uint16_t adc_buffer[]);
 
+void TIM_OutputDAC(uint16_t DAC_Output);
 
 #endif /* SRC_TIM_H_ */

@@ -114,8 +114,6 @@ int main(void)
   HAL_DAC_Start(&hdac,DAC1_CHANNEL_1);
 
   // DAC STUFF
-  float val = 2.2;
-  uint32_t var;
 
   // END DAC STUFF
 
@@ -127,14 +125,11 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	  var = val*(4096)/3.3;
-	  HAL_DAC_SetValue(&hdac, DAC_CHANNEL_1, DAC_ALIGN_12B_R, var);
-	  val += 0.5;
-	  HAL_Delay(2000);
-	  if (val>3) val=0.2;
 
+	  //int voltage = TIM_ConvertValue(128);
+	  //TIM_OutputDAC(voltage);
 	  HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_15);
-	  //HAL_Delay(500);
+	  HAL_Delay(500);
 
     /* USER CODE END WHILE */
 
