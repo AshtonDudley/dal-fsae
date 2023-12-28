@@ -51,10 +51,15 @@ void TIM_Init(ADC_HandleTypeDef *TIM_hadc1){
 }
 
 /**
-  * @brief  This function is executed when half the TIM buffer is full
-  * @retval None
+  * @brief  Used to average half of the buffer, and output a 0-3.3V signal to the
+  * motor controller.
+  *	Note, the signal is amplified to a 0-5V range using a hardware amp.
+  * Motor Data sheet: https://wiki.neweagle.net/docs/Rinehart/PM100_User_Manual_3_2011.pdf
+  * @return 0-3.3v Analog Voltage
   */
+void TIM_OutputDAC(){
 
+}
 
 
 
