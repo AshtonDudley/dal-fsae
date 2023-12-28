@@ -12,7 +12,9 @@
 
 void TIM_Init(ADC_HandleTypeDef *TIM_hadc1);
 
-float TIM_ConvertValue(uint16_t inputValue);
+uint16_t TIM_ConvertValue(uint16_t inputValue);
+
+uint16_t TIM_Average(uint16_t adc_buffer[]);
 
 
 #endif /* SRC_TIM_H_ */

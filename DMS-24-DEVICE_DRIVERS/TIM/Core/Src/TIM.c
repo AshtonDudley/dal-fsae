@@ -21,7 +21,7 @@ uint16_t adc_buf[ADC_BUFFER_LEN];
  * @brief Throttle Input Module
  * @return Throttle value scaled to desired map
  */
-float TIM_ConvertValue(uint16_t  inputValue)
+uint16_t TIM_ConvertValue(uint16_t  inputValue)
 {
 	uint16_t xarray[] = {0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
 	float yarray[] = {0.0f, 2.5f, 7.5f, 12.5f, 20.0f, 30.0f, 40.0f, 50.0f, 60.0f, 75.0f, 100.0f};
@@ -37,7 +37,8 @@ float TIM_ConvertValue(uint16_t  inputValue)
 	y0 = yarray[i - 1];
 	y1 = yarray[i];
 
-	float outputValue = y1 + (inputValue - x1) * ((y1 - y0) / (x1 - x0)); // Linear Approximation
+	uint16_t outputValue =  (y1 + (inputValue - x1) * ((y1 - y0) / (x1 - x0))); 	// Linear Approximation, On a scale of 1-100
+	outputValue = outputValue / 30.3030f * 4096 / 3.3; 								// Convert Value from 1-100 scale to 1-4096
 	return outputValue;
 }
 
@@ -49,6 +50,15 @@ float TIM_ConvertValue(uint16_t  inputValue)
 void TIM_Init(ADC_HandleTypeDef *TIM_hadc1){
 	HAL_ADC_Start_DMA(TIM_hadc1, (uint32_t*)adc_buf, ADC_BUFFER_LEN);
 }
+
+uint16_t TIM_Average(uint16_t adc_buffer[]){
+	uint16_t total = 0;
+	for (int i = 0; i < ADC_BUFFER_LEN / 2; i++) {
+		total += adc_buffer[i];
+	}
+	return total / (ADC_BUFFER_LEN / 2);
+}
+
 
 /**
   * @brief  Used to average half of the buffer, and output a 0-3.3V signal to the

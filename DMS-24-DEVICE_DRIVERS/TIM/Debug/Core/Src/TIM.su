@@ -1,4 +1,6 @@
-../Core/Src/TIM.c:24:7:TIM_ConvertValue	120	static
-../Core/Src/TIM.c:49:6:TIM_Init	16	static
-../Core/Src/TIM.c:65:6:HAL_ADC_ConvHalfCpltCallback	16	static
-../Core/Src/TIM.c:74:6:HAL_ADC_ConvCpltCallback	16	static
+../Core/Src/TIM.c:24:10:TIM_ConvertValue	112	static
+../Core/Src/TIM.c:50:6:TIM_Init	16	static
+../Core/Src/TIM.c:54:10:TIM_Average	24	static
+../Core/Src/TIM.c:70:6:TIM_OutputDAC	4	static
+../Core/Src/TIM.c:80:6:HAL_ADC_ConvHalfCpltCallback	16	static
+../Core/Src/TIM.c:89:6:HAL_ADC_ConvCpltCallback	16	static
