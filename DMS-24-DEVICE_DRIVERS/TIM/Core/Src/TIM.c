@@ -54,6 +54,14 @@ void TIM_Init(ADC_HandleTypeDef *TIM_hadc1){
   * @brief  This function is executed when half the TIM buffer is full
   * @retval None
   */
+
+
+
+
+/**
+  * @brief  This function is executed when half the TIM buffer is full
+  * @retval None
+  */
 void HAL_ADC_ConvHalfCpltCallback(ADC_HandleTypeDef* hadc1){
 	HAL_GPIO_WritePin(GPIOD, GPIO_PIN_12, GPIO_PIN_SET);
 }

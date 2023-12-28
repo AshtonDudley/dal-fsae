@@ -1,4 +1,4 @@
-../Core/Src/TIM.c:23:7:TIM_ConvertValue	120	static
-../Core/Src/TIM.c:43:6:TIM_Init	16	static
-../Core/Src/TIM.c:51:6:HAL_ADC_ConvHalfCpltCallback	16	static
-../Core/Src/TIM.c:60:6:HAL_ADC_ConvCpltCallback	16	static
+../Core/Src/TIM.c:24:7:TIM_ConvertValue	120	static
+../Core/Src/TIM.c:49:6:TIM_Init	16	static
+../Core/Src/TIM.c:65:6:HAL_ADC_ConvHalfCpltCallback	16	static
+../Core/Src/TIM.c:74:6:HAL_ADC_ConvCpltCallback	16	static
