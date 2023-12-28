@@ -16,6 +16,7 @@ uint16_t adc_buf[ADC_BUFFER_LEN];
 
 
 
+
 /**
  * @brief Throttle Input Module
  * @return Throttle value scaled to desired map
@@ -40,6 +41,11 @@ float TIM_ConvertValue(uint16_t  inputValue)
 	return outputValue;
 }
 
+/**
+  * @brief  Must be used to initialize ADC with DMA
+  * @param ADC_HandleTypeDef
+  * @retval None
+  */
 void TIM_Init(ADC_HandleTypeDef *TIM_hadc1){
 	HAL_ADC_Start_DMA(TIM_hadc1, (uint32_t*)adc_buf, ADC_BUFFER_LEN);
 }
