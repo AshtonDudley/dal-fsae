@@ -11,6 +11,7 @@
 /*	INCLUDES	*/
 #include "stm32f4xx_hal.h"
 #include "stdbool.h"
+#include "PEDAL_PLAUSIBILITY.h"
 
 
 
@@ -30,7 +31,7 @@ typedef struct throttleProfileConfig_s {
 } throttleProfileConfig_t;
 
 typedef struct adcBufferChannel_s {
-	uint16_t adcThottle[ADC_CHANNEL_BUFFER_LEN];
+	uint16_t adcThrottle[ADC_CHANNEL_BUFFER_LEN];
 	uint16_t adcBPS[ADC_CHANNEL_BUFFER_LEN];
 }adcBufferChannel_t;
 

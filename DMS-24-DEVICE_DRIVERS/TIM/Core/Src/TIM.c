@@ -121,7 +121,7 @@ void TIM_DeInterleave(){
 		  adcBufferChannel.adcBPS[k] = adc_buf[i];
 		}
 		else {
-		  adcBufferChannel.adcThottle[k] = adc_buf[i];
+		  adcBufferChannel.adcThrottle[k] = adc_buf[i];
 		  k++;
 		}
 	}
@@ -155,10 +155,27 @@ void TIM_Init(ADC_HandleTypeDef *TIM_hadc1){
   */
 void HAL_ADC_ConvHalfCpltCallback(ADC_HandleTypeDef* hadc1){
 	TIM_DeInterleave();
+	// Average the first half of the buffer
+	uint32_t throttleInputVoltage = TIM_Average(adcBufferChannel.adcThrottle);
+	uint32_t bpsInputVoltage = TIM_Average(adcBufferChannel.adcBPS);
+	// Plausibility Checks
+	uint32_t PAG = PDP_PedealAgreement(throttleInputVoltage, bpsInputVoltage);
 
-	uint32_t outputVoltage = TIM_Average(adcBufferChannel.adcBPS);
-	uint32_t convertedVoltage = TIM_ConvertValueLinearApprox(outputVoltage);
-	TIM_OutputDAC(convertedVoltage);
+	switch (PAG){
+		case 0:
+			uint32_t motorControllerOutputVoltage = TIM_ConvertValueLinearApprox(throttleInputVoltage);
+			TIM_OutputDAC(motorControllerOutputVoltage);
+			break;
+		case 1:			// TODO add driver notifications and CAN logging for fault cases
+			break;
+		case 2:
+			break;
+		default:
+			break;
+
+	}
+
+	// Convert and output voltage
 	HAL_GPIO_WritePin(GPIOD, GPIO_PIN_12, GPIO_PIN_SET);
 }
 

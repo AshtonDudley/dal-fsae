@@ -7,25 +7,31 @@
 
 #include "PEDAL_PLAUSIBILITY.h"
 
-/* 	true == fault 	*/
-volatile bool PAG_fault = false;
+
+volatile uint32_t PAG_fault = 0;
 volatile bool AAC_fault = false;
-volatile bool SPA_fault	= flase;
+volatile bool SPA_fault	= false;
 
 
 /**
   * @brief  Pedal Agreement Check. Latches until throttle pedal is released
-  * @retval true pedal agreement fault
-  * @retval false no fault
+  * @retval 0 no fault
+  * @retval 1 PAG_fault, both pedals currently active
+  * @retval 2 PAG_fault, waiting for latch to reset
   */
-bool PDP_PedealAgreement(uint32_t apps, uint32_t fbps){
+uint32_t PDP_PedealAgreement(uint32_t apps, uint32_t fbps){ 		// PAG_fault active
 	if (apps > APPS_PAG_THRESHOLD && fbps > FBPS_PAG_THRESHOLD){
-		PAG_fault = true;
+		PAG_fault = 1;
 		return PAG_fault;
 	}
-	else if (PAG_fault == true && apps < APPS_PAG_RESET_THRESHOLD){
-		PAG_fault = false;
+
+	else if (PAG_fault > 0 && apps < APPS_PAG_RESET_THRESHOLD){		// Check if latch can be reset
+		PAG_fault = 0;
 		return PAG_fault;
+	}
+	else if(PAG_fault > 0 && apps > APPS_PAG_THRESHOLD){ 			// Waiting for latch to reset fault
+		PAG_fault = 2;
+		return 2;
 	}
 	else{
 		return PAG_fault;

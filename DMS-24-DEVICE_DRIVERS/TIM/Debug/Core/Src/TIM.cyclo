@@ -6,5 +6,5 @@
 ../Core/Src/TIM.c:115:6:TIM_DeInterleave	3
 ../Core/Src/TIM.c:138:6:TIM_OutputDAC	1
 ../Core/Src/TIM.c:148:6:TIM_Init	1
-../Core/Src/TIM.c:156:6:HAL_ADC_ConvHalfCpltCallback	1
-../Core/Src/TIM.c:170:6:HAL_ADC_ConvCpltCallback	1
+../Core/Src/TIM.c:156:6:HAL_ADC_ConvHalfCpltCallback	5
+../Core/Src/TIM.c:187:6:HAL_ADC_ConvCpltCallback	1
