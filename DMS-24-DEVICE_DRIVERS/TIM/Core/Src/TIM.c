@@ -112,16 +112,16 @@ uint16_t TIM_Average(uint16_t adc_buffer[]){
   * using global variables
   * @retval None
   */
-void TIM_DeInterleave(adcBufferChannel_t *adcBuf, uint16_t unsortedBuf[]){
+void TIM_DeInterleave(adcBufferChannel_t *adcBuf, uint16_t unsortedBuf[]){ // TODO FIX THIS AHHHHHH
 	int k = 0;
 	for (int i = 0; i < ADC_BUFFER_LEN; i++) {
 		// if i is divisible by two, add it to the adcBPS buffer, otherwise add it
 		// to the adcThottle buffer
 		if (i % 2 == 0) {
-			adcBuf->adcBPS_buf[k] = unsortedBuf[i];
+			adcBuf->adcBPS_buf[k] = *unsortedBuf[i]; 	// TODO FIX THIS AHHHHHH
 		}
 		else {
-			adcBuf->adcThrottle_buf[k] = unsortedBuf[i];
+			adcBuf->adcThrottle_buf[k] = *unsortedBuf[i]; // TODO FIX THIS AHHHHHH
 			k++;
 		}
 	}
