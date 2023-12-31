@@ -112,16 +112,16 @@ uint16_t TIM_Average(uint16_t adc_buffer[]){
   * using global variables
   * @retval None
   */
-void TIM_DeInterleave(){
+void TIM_DeInterleave(adcBufferChannel_t *adcBuf, uint16_t *unsortedBuf){
 	int k = 0;
 	for (int i = 0; i < ADC_BUFFER_LEN; i++) {
 		// if i is divisible by two, add it to the adcBPS buffer, otherwise add it
 		// to the adcThottle buffer
 		if (i % 2 == 0) {
-		  adcBufferChannel.adcBPS[k] = adc_buf[i];
+			adcBuf->adcBPS[k] = unsortedBuf[i];
 		}
 		else {
-		  adcBufferChannel.adcThrottle[k] = adc_buf[i];
+			adcBuf->adcThrottle[k] = unsortedBuf[i];
 		  k++;
 		}
 	}
@@ -154,30 +154,28 @@ void TIM_Init(ADC_HandleTypeDef *TIM_hadc1){
   * @retval None
   */
 void HAL_ADC_ConvHalfCpltCallback(ADC_HandleTypeDef* hadc1){
-	TIM_DeInterleave();
+	TIM_DeInterleave(&adcBufferChannel, adc_buf);
 	// Average the first half of the buffer
 	uint32_t throttleInputVoltage = TIM_Average(adcBufferChannel.adcThrottle);
 	uint32_t bpsInputVoltage = TIM_Average(adcBufferChannel.adcBPS);
+
 	// Plausibility Checks
 	uint32_t PAG = PDP_PedealAgreement(throttleInputVoltage, bpsInputVoltage);
-
 	switch (PAG){
-		case 0:
+		case PDP_OKAY:
 			uint32_t motorControllerOutputVoltage = TIM_ConvertValueLinearApprox(throttleInputVoltage);
 			TIM_OutputDAC(motorControllerOutputVoltage);
 			break;
-		case 1:			// TODO add driver notifications and CAN logging for fault cases
+		case PDP_ERROR:			// TODO add driver notifications and CAN logging for fault cases
 			break;
-		case 2:
+		case PDP_RESET_LATCH:	// TODO add driver notifications and CAN logging for fault cases
 			break;
 		default:
 			break;
-
 	}
 
-	// Convert and output voltage
-	HAL_GPIO_WritePin(GPIOD, GPIO_PIN_12, GPIO_PIN_SET);
-}
+	HAL_GPIO_WritePin(GPIOD, GPIO_PIN_12, GPIO_PIN_SET);	// Flashing this LED lets us monitor the state
+}															// of the buffer using the oscilloscope
 
 
 /**

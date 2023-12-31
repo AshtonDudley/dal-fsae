@@ -582,6 +582,7 @@ void Error_Handler(void)
   __disable_irq();
   while (1)
   {
+	  // WE DO NOT WANT TO BE HERE :(
   }
   /* USER CODE END Error_Handler_Debug */
 }

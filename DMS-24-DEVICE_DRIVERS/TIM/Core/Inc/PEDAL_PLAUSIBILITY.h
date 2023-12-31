@@ -13,12 +13,25 @@
 #include "stdbool.h"
 
 
+
+/**
+  * @brief  HAL Status structures definition
+  */
+typedef enum
+{
+  PDP_OKAY 			= 0x00U,
+  PDP_ERROR	    	= 0x01U,
+  PDP_RESET_LATCH   = 0x02U,
+  PDP_TIMEOUT 		= 0x03U
+} PDP_StatusTypeDef;
+
+
 /* DEFINES 	*/
 #define APPS_PAG_THRESHOLD 			107 	// APPS1 Threshold 1.25V	(1.25V / 3.3V) * 256
 #define FBPS_PAG_THRESHOLD 			19		// FBPS  Threshold 0.25V	(0.25V / 3.3V) * 256
 #define APPS_PAG_RESET_THRESHOLD	19		// RESET Threshold 0.25V	(0.25V / 3.3V) * 256
 
 
-uint32_t PDP_PedealAgreement(uint32_t apps, uint32_t fbps);
+PDP_StatusTypeDef PDP_PedealAgreement(uint32_t apps, uint32_t fbps);
 
 #endif /* INC_PEDAL_PLAUSIBILITY_H_ */

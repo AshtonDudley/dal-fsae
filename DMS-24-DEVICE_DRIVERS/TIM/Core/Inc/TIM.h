@@ -49,7 +49,7 @@ uint16_t TIM_ConvertValueLinearApprox(uint16_t inputValue);
 
 uint16_t TIM_Average(uint16_t adc_buffer[]);
 
-void TIM_DeInterleave();
+void TIM_DeInterleave(adcBufferChannel_t *adcBuf, uint16_t *unsortedBuf);
 
 void TIM_OutputDAC(uint16_t DAC_Output);
 
