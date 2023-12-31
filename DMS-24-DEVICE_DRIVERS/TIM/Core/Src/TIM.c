@@ -25,7 +25,7 @@ uint32_t var;
  */
 uint16_t TIM_ConvertValue(uint16_t inputValue)
 {
-	float xarray[] = {0, 26, 51, 77, 102, 128, 153, 179, 204, 230, 255};
+	float xarray[] = {0.0f, 26.0f, 51.0f, 77.0f, 102.0f, 128.0f, 153.0f, 179.0f, 204.0f, 230.0f, 256.0f	};
 	//uint16_t xarray[] = {0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
 	float yarray[] = {0.0f, 2.5f, 7.5f, 12.5f, 20.0f, 30.0f, 40.0f, 50.0f, 60.0f, 75.0f, 100.0f};
 
@@ -60,6 +60,7 @@ void TIM_Init(ADC_HandleTypeDef *TIM_hadc1){
   * motor controller.
   *	Note, the signal is amplified to a 0-5V range using a hardware amp.
   * Motor Data sheet: https://wiki.neweagle.net/docs/Rinehart/PM100_User_Manual_3_2011.pdf
+  * @todo Replace with a moving average algorithm, for large buffer sizes, an overflow may occur
   * @return averages first half the the input array
   */
 uint16_t TIM_Average(uint16_t adc_buffer[]){
