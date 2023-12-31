@@ -8,6 +8,7 @@
 
 #include "stm32f4xx_hal.h"
 #include "TIM.h"
+#include "stdbool.h"
 
 extern DAC_HandleTypeDef hdac;
 
@@ -128,6 +129,9 @@ void TIM_DeInterleave(){
 	}
 }
 
+static bool TIM_PedalAgreement
+
+
 
 /**
   * @brief  Uses DAC to output a 0-3.3V signal to the motor controller.
@@ -138,8 +142,6 @@ void TIM_DeInterleave(){
 void TIM_OutputDAC(uint16_t DAC_Output){
 	  HAL_DAC_SetValue(&hdac, DAC_CHANNEL_1, DAC_ALIGN_12B_R, DAC_Output);
 }
-
-
 
 
 /**
@@ -157,7 +159,8 @@ void TIM_Init(ADC_HandleTypeDef *TIM_hadc1){
   */
 void HAL_ADC_ConvHalfCpltCallback(ADC_HandleTypeDef* hadc1){
 	TIM_DeInterleave();
-	uint32_t outputVoltage = TIM_Average(adc_buf);
+
+	uint32_t outputVoltage = TIM_Average(adcBufferChannel.adcBPS);
 	uint32_t convertedVoltage = TIM_ConvertValueLinearApprox(outputVoltage);
 	TIM_OutputDAC(convertedVoltage);
 	HAL_GPIO_WritePin(GPIOD, GPIO_PIN_12, GPIO_PIN_SET);

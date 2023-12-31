@@ -2,15 +2,22 @@
  * TIM.h
  *
  *  Created on: Dec 27, 2023
- *      Author: Ashton Dudley
+ *  Author: Ashton Dudley
  */
 
 #ifndef SRC_TIM_H_
 #define SRC_TIM_H_
 
+/*	INCLUDES	*/
+#include "stm32f4xx_hal.h"
+#include "stdbool.h"
 
-	#define ADC_BUFFER_LEN 128 			// must be a power of two, when divided by the total number of ADC channels//
-	#define ADC_CHANNEL_BUFFER_LEN 64 	//buffer length per ADC channel, must be divisible into ADC_BUFFER_LEN
+
+
+
+
+#define ADC_BUFFER_LEN 128 			// must be a power of two, when divided by the total number of ADC channels//
+#define ADC_CHANNEL_BUFFER_LEN 64 	//buffer length per ADC channel, must be divisible into ADC_BUFFER_LEN
 
 #define MAX_THROTTLE_PROFILE_NAME_LENGTH 8u
 
