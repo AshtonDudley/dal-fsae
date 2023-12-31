@@ -67,14 +67,14 @@ uint16_t TIM_ConvertValue(uint16_t inputValue)
  */
 uint16_t TIM_ConvertValueLinearApprox(uint16_t inputValue)
 {
-	float xarray[] = {0.0f, 23.3f, 46.6f, 69.9f, 93.2f, 116.5f, 139.8f, 163.1f, 186.4f, 209.7f, 233.0f};
+	float xarray[] = {0.0f, 25.6f, 51.2f, 76.8f, 102.4f, 128.0f, 153.6f, 179.2f, 204.8f, 230.4f, 256.0f};	// NOTE: The last value on this array MUST be larger then the largest possible ADC input value
 	float yarray[] = {0.0f, 102.4f, 307.2f, 512.0f, 819.2f, 1228.8f, 1638.4f, 2048.0f, 2457.6f, 3072.0f, 4096.0f};
 
 
 	float x0 = 0.0f, x1 = 0.0f, y0 = 0.0f, y1 = 0.0f;
 
 	int i = 0;
-	while (xarray[i] < inputValue) {
+	while (xarray[i] < inputValue && i < 11) { // TODO: Improve the safety of this function
 		i++;
 	}
 	x0 = xarray[i - 1];
@@ -83,7 +83,7 @@ uint16_t TIM_ConvertValueLinearApprox(uint16_t inputValue)
 	y1 = yarray[i];
 
 	uint16_t outputValue =  (y1 + (inputValue - x1) * ((y1 - y0) / (x1 - x0))); 	// Linear Approximation, On a scale of 1-100
-	outputValue = outputValue / 30.3030f * 4096 / 3.3; 								// Convert Value from 1-100 scale to 1-4096
+	//outputValue = outputValue / 30.3030f * 4096 / 3.3; 								// Convert Value from 1-100 scale to 1-4096
 	return outputValue;
 }
 

@@ -1,7 +1,7 @@
 ../Core/Src/TIM.c:28:7:TIM_GetScaledThrottle	2
 ../Core/Src/TIM.c:37:7:TIM_GetExpoedValue	1
 ../Core/Src/TIM.c:44:10:TIM_ConvertValue	2
-../Core/Src/TIM.c:68:10:TIM_ConvertValueLinearApprox	2
+../Core/Src/TIM.c:68:10:TIM_ConvertValueLinearApprox	3
 ../Core/Src/TIM.c:95:6:TIM_Init	1
 ../Core/Src/TIM.c:108:10:TIM_Average	2
 ../Core/Src/TIM.c:124:6:TIM_OutputDAC	1
