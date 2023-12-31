@@ -1,6 +1,9 @@
-../Core/Src/TIM.c:26:10:TIM_ConvertValue	2
-../Core/Src/TIM.c:53:6:TIM_Init	1
-../Core/Src/TIM.c:65:10:TIM_Average	2
-../Core/Src/TIM.c:81:6:TIM_OutputDAC	1
-../Core/Src/TIM.c:91:6:HAL_ADC_ConvHalfCpltCallback	1
-../Core/Src/TIM.c:104:6:HAL_ADC_ConvCpltCallback	1
+../Core/Src/TIM.c:28:7:TIM_GetScaledThrottle	2
+../Core/Src/TIM.c:37:7:TIM_GetExpoedValue	1
+../Core/Src/TIM.c:44:10:TIM_ConvertValue	2
+../Core/Src/TIM.c:68:10:TIM_ConvertValueLinearApprox	2
+../Core/Src/TIM.c:95:6:TIM_Init	1
+../Core/Src/TIM.c:108:10:TIM_Average	2
+../Core/Src/TIM.c:124:6:TIM_OutputDAC	1
+../Core/Src/TIM.c:134:6:HAL_ADC_ConvHalfCpltCallback	1
+../Core/Src/TIM.c:147:6:HAL_ADC_ConvCpltCallback	1

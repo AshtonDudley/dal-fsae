@@ -15,15 +15,57 @@ extern DAC_HandleTypeDef hdac;
 uint16_t adc_buf[ADC_BUFFER_LEN];
 
 
-float val = 2.2;
-uint32_t var;
+throttleProfileConfig_t throttleProfileConfig = (throttleProfileConfig_t){
+	.thrExpo = 50,
+	.regenExpo = 50,
+	.crossover = 30
+};
+
+/**
+ * @brief Scales throttle input so regen is < 0 and throttle is > 0
+ * @return Scaled throttle values with regen -1 to 0 and throttle is 0 to 1
+ */
+float TIM_GetScaledThrottle(float inputVal){
+	float maxVal = 1.00f - (throttleProfileConfig.crossover / 100.00f);
+	if (inputVal < 0.00f) {
+		maxVal = throttleProfileConfig.crossover / 100.00f;
+	}
+	return inputVal / maxVal;
+}
+
+
+float TIM_GetExpoedValue(float rawIn, float expoVal){
+	float expoF = expoVal / 100.00f;
+	float power5 = rawIn * rawIn * rawIn * rawIn * rawIn;
+	return power5 * expoF + rawIn  * (1.00f - expoF);
+}
+
+
+uint16_t TIM_ConvertValue(uint16_t inputValue)
+{
+	float inputPos = (inputValue / 255.00f) - (throttleProfileConfig.crossover / 100.00f); // Scale 0-1 and then shift down so regen is - and throttle is positive.
+	float crossoverF = (throttleProfileConfig.crossover / 100.00f);
+	float scaledThrottle = TIM_GetScaledThrottle(inputPos);
+	float expoedThrottle = 0.00f;
+	float throttleOut = 0.00f;
+
+	if (scaledThrottle < 0.00f){
+		expoedThrottle = TIM_GetExpoedValue(scaledThrottle, throttleProfileConfig.thrExpo);
+		throttleOut = expoedThrottle * crossoverF + crossoverF;
+	} else {
+		expoedThrottle = TIM_GetExpoedValue(scaledThrottle, throttleProfileConfig.regenExpo);
+		throttleOut = expoedThrottle * (1.00f - crossoverF) + crossoverF;
+	}
+
+	return throttleOut * 2048;
+}
 
 
 /**
  * @brief Throttle Input Module
  * @return Throttle value scaled to desired map
  */
-uint16_t TIM_ConvertValue(uint16_t inputValue)
+uint16_t TIM_ConvertValueLinearApprox(uint16_t inputValue)
 {
 	float xarray[] = {0.0f, 26.0f, 51.0f, 77.0f, 102.0f, 128.0f, 153.0f, 179.0f, 204.0f, 230.0f, 256.0f	};
 	//uint16_t xarray[] = {0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
