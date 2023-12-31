@@ -531,7 +531,7 @@ uint16_t TIM_ConvertValue(uint16_t inputValue)
  8000698:	edc7 7a07 	vstr	s15, [r7, #28]
 	}
 
-	return throttleOut * 2048;
+	return throttleOut * 4096;
  800069c:	edd7 7a07 	vldr	s15, [r7, #28]
  80006a0:	ed9f 7a09 	vldr	s14, [pc, #36]	; 80006c8 <TIM_ConvertValue+0x114>
  80006a4:	ee67 7a87 	vmul.f32	s15, s15, s14
@@ -547,7 +547,7 @@ uint16_t TIM_ConvertValue(uint16_t inputValue)
  80006bc:	437f0000 	.word	0x437f0000
  80006c0:	20000000 	.word	0x20000000
  80006c4:	42c80000 	.word	0x42c80000
- 80006c8:	45000000 	.word	0x45000000
+ 80006c8:	45800000 	.word	0x45800000
 
 080006cc <TIM_Init>:
 /**
