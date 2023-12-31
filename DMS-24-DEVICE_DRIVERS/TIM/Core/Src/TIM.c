@@ -6,9 +6,7 @@
  */
 
 
-#include "stm32f4xx_hal.h"
 #include "TIM.h"
-#include "stdbool.h"
 
 extern DAC_HandleTypeDef hdac;
 
@@ -128,8 +126,6 @@ void TIM_DeInterleave(){
 		}
 	}
 }
-
-static bool TIM_PedalAgreement
 
 
 
