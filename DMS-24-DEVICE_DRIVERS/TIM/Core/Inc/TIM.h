@@ -8,6 +8,10 @@
 #ifndef SRC_TIM_H_
 #define SRC_TIM_H_
 
+
+	#define ADC_BUFFER_LEN 128 			// must be a power of two, when divided by the total number of ADC channels//
+	#define ADC_CHANNEL_BUFFER_LEN 64 	//buffer length per ADC channel, must be divisible into ADC_BUFFER_LEN
+
 #define MAX_THROTTLE_PROFILE_NAME_LENGTH 8u
 
 typedef struct throttleProfileConfig_s {
@@ -17,6 +21,12 @@ typedef struct throttleProfileConfig_s {
     uint8_t throttleProfile_Type;
     char profileName[MAX_THROTTLE_PROFILE_NAME_LENGTH + 1]; // Descriptive name for throttle profile
 } throttleProfileConfig_t;
+
+typedef struct adcBufferChannel_s {
+	uint16_t adcThottle[ADC_CHANNEL_BUFFER_LEN];
+	uint16_t adcBPS[ADC_CHANNEL_BUFFER_LEN];
+}adcBufferChannel_t;
+
 
 
 float TIM_GetScaledThrottle(float inputVal);
@@ -30,6 +40,8 @@ uint16_t TIM_ConvertValue(uint16_t inputValue);
 uint16_t TIM_ConvertValueLinearApprox(uint16_t inputValue);
 
 uint16_t TIM_Average(uint16_t adc_buffer[]);
+
+void TIM_DeInterleave();
 
 void TIM_OutputDAC(uint16_t DAC_Output);
 

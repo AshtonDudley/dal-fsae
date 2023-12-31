@@ -11,8 +11,9 @@
 
 extern DAC_HandleTypeDef hdac;
 
-#define ADC_BUFFER_LEN 128
-uint16_t adc_buf[ADC_BUFFER_LEN];
+
+uint16_t adc_buf[ADC_BUFFER_LEN];	 							// Interlaced ADC data
+adcBufferChannel_t adcBufferChannel = (adcBufferChannel_t){};	// De-Interlaced ADC Data
 
 
 throttleProfileConfig_t throttleProfileConfig = (throttleProfileConfig_t){
@@ -87,31 +88,44 @@ uint16_t TIM_ConvertValueLinearApprox(uint16_t inputValue)
 	return outputValue;
 }
 
-/**
-  * @brief  Must be used to initialize ADC with DMA
-  * @param ADC_HandleTypeDef
-  * @retval None
-  */
-void TIM_Init(ADC_HandleTypeDef *TIM_hadc1){
-	HAL_ADC_Start_DMA(TIM_hadc1, (uint32_t*)adc_buf, ADC_BUFFER_LEN);
-}
 
 
 /**
-  * @brief  Used to average half of the buffer, and output a 0-3.3V signal to the
+  * @brief  Used to average half of the sorted buffer, and output a 0-3.3V signal to the
   * motor controller.
   *	Note, the signal is amplified to a 0-5V range using a hardware amp.
   * Motor Data sheet: https://wiki.neweagle.net/docs/Rinehart/PM100_User_Manual_3_2011.pdf
   * @todo Replace with a moving average algorithm, for large buffer sizes, an overflow may occur
-  * @return averages first half the the input array
+  * @return averages first half the the input arrays
   */
 uint16_t TIM_Average(uint16_t adc_buffer[]){
 	uint32_t total = 0;
-	for (int i = 0; i < (ADC_BUFFER_LEN / 2); i++) {
-		total += adc_buffer[i];
+	for (int i = 0; i < (ADC_CHANNEL_BUFFER_LEN / 2); i++) {  	// TODO Change buffer since to channel size
+		total += adc_buffer[i];									// TODO Change to moving average
 	}
-	uint16_t avg = total / (ADC_BUFFER_LEN / 2);
+	uint16_t avg = total / (ADC_CHANNEL_BUFFER_LEN / 2);
 	return avg;
+}
+/**
+  * @brief  De-Interleves the DMA buffer, into two separate buffers
+  * @note we should look at improving this function so its scalable for more channels
+  * and to improve efficiency. We may also want to pass a pointer to the struct, rather then
+  * using global variables
+  * @retval None
+  */
+void TIM_DeInterleave(){
+	int k = 0;
+	for (int i = 0; i < ADC_BUFFER_LEN; i++) {
+		// if i is divisible by two, add it to the adcBPS buffer, otherwise add it
+		// to the adcThottle buffer
+		if (i % 2 == 0) {
+		  adcBufferChannel.adcBPS[k] = adc_buf[i];
+		}
+		else {
+		  adcBufferChannel.adcThottle[k] = adc_buf[i];
+		  k++;
+		}
+	}
 }
 
 
@@ -127,12 +141,22 @@ void TIM_OutputDAC(uint16_t DAC_Output){
 
 
 
+
+/**
+  * @brief  Must be used to initialize ADC with DMA
+  * @param ADC_HandleTypeDef
+  * @retval None
+  */
+void TIM_Init(ADC_HandleTypeDef *TIM_hadc1){
+	HAL_ADC_Start_DMA(TIM_hadc1, (uint32_t*)adc_buf, ADC_BUFFER_LEN);
+}
+
 /**
   * @brief  This function is executed when half the TIM buffer is full
   * @retval None
   */
 void HAL_ADC_ConvHalfCpltCallback(ADC_HandleTypeDef* hadc1){
-
+	TIM_DeInterleave();
 	uint32_t outputVoltage = TIM_Average(adc_buf);
 	uint32_t convertedVoltage = TIM_ConvertValueLinearApprox(outputVoltage);
 	TIM_OutputDAC(convertedVoltage);
