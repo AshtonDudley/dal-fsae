@@ -1,0 +1,10 @@
+../Core/Src/TIM.c:28:7:TIM_GetScaledThrottle	24	static
+../Core/Src/TIM.c:37:7:TIM_GetExpoedValue	24	static
+../Core/Src/TIM.c:44:10:TIM_ConvertValue	40	static
+../Core/Src/TIM.c:68:10:TIM_ConvertValueLinearApprox	136	static
+../Core/Src/TIM.c:100:10:TIM_Average	32	static
+../Core/Src/TIM.c:115:6:TIM_DeInterleave	16	static
+../Core/Src/TIM.c:138:6:TIM_OutputDAC	16	static
+../Core/Src/TIM.c:148:6:TIM_Init	16	static
+../Core/Src/TIM.c:156:6:HAL_ADC_ConvHalfCpltCallback	32	static
+../Core/Src/TIM.c:187:6:HAL_ADC_ConvCpltCallback	16	static
