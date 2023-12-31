@@ -39,3 +39,10 @@ PDP_StatusTypeDef PDP_PedealAgreement(uint32_t apps, uint32_t fbps){ 		// PAG_fa
 }
 
 
+// TODO APPS AGREEMENT FAULT LOGIC
+
+// TODO SIGNAL PLAUSIBILITY FAULT LOGIC
+
+
+
+
