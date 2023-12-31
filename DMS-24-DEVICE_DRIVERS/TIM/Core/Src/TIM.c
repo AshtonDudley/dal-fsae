@@ -67,9 +67,9 @@ uint16_t TIM_ConvertValue(uint16_t inputValue)
  */
 uint16_t TIM_ConvertValueLinearApprox(uint16_t inputValue)
 {
-	float xarray[] = {0.0f, 26.0f, 51.0f, 77.0f, 102.0f, 128.0f, 153.0f, 179.0f, 204.0f, 230.0f, 256.0f};
-	//uint16_t xarray[] = {0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
-	float yarray[] = {0.0f, 2.5f, 7.5f, 12.5f, 20.0f, 30.0f, 40.0f, 50.0f, 60.0f, 75.0f, 100.0f};
+	float xarray[] = {0.0f, 23.3f, 46.6f, 69.9f, 93.2f, 116.5f, 139.8f, 163.1f, 186.4f, 209.7f, 233.0f};
+	float yarray[] = {0.0f, 102.4f, 307.2f, 512.0f, 819.2f, 1228.8f, 1638.4f, 2048.0f, 2457.6f, 3072.0f, 4096.0f};
+
 
 	float x0 = 0.0f, x1 = 0.0f, y0 = 0.0f, y1 = 0.0f;
 
@@ -134,7 +134,7 @@ void TIM_OutputDAC(uint16_t DAC_Output){
 void HAL_ADC_ConvHalfCpltCallback(ADC_HandleTypeDef* hadc1){
 
 	uint32_t outputVoltage = TIM_Average(adc_buf);
-	uint32_t convertedVoltage = TIM_ConvertValue(outputVoltage);
+	uint32_t convertedVoltage = TIM_ConvertValueLinearApprox(outputVoltage);
 	TIM_OutputDAC(convertedVoltage);
 	HAL_GPIO_WritePin(GPIOD, GPIO_PIN_12, GPIO_PIN_SET);
 }

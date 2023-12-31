@@ -5,6 +5,8 @@
  # @brief Tool to convert TIM maps to arrays.
  #
 
+import subprocess
+
 
 def is_float(element: any) -> bool:
     #If you expect None to be passed:
@@ -15,6 +17,10 @@ def is_float(element: any) -> bool:
         return True
     except ValueError:
         return False
+
+def copyToClip(txt):
+    cmd='echo '+txt.strip()+'|clip'
+    return subprocess.check_call(cmd, shell=True)
 
 def main():
     exit = False
@@ -43,8 +49,9 @@ def main():
         outputArray = outputArray[:-1]
         outputArray = outputArray[:-1]
         outputArray = outputArray + "}"
+        
         print(outputArray)
-
+        copyToClip(outputArray)
         exit = True
     return
 
