@@ -57,7 +57,7 @@ uint16_t TIM_ConvertValue(uint16_t inputValue)
 		throttleOut = expoedThrottle * (1.00f - crossoverF) + crossoverF;
 	}
 
-	return throttleOut * 2048;
+	return throttleOut * 4096;
 }
 
 
