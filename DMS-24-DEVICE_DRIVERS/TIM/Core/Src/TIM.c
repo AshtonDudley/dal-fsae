@@ -10,7 +10,6 @@
 
 extern DAC_HandleTypeDef hdac;
 
-
 uint16_t adc_buf[ADC_BUFFER_LEN];	 							// Interlaced ADC data
 adcBufferChannel_t adcBufferChannel = (adcBufferChannel_t){};	// De-Interlaced ADC Data
 
@@ -161,7 +160,7 @@ void HAL_ADC_ConvHalfCpltCallback(ADC_HandleTypeDef* hadc1){
 	adcBufferChannel.adcBPS 	 =	TIM_Average(adcBufferChannel.adcBPS_buf);
 
 	// Plausibility Checks
-	uint32_t PAG = PDP_PedealAgreement(adcBufferChannel.adcThrottle, adcBufferChannel.adcBPS);
+	PDP_StatusTypeDef PAG = PDP_PedealAgreement(adcBufferChannel.adcThrottle, adcBufferChannel.adcBPS);
 	switch (PAG){
 		case PDP_OKAY:
 			uint32_t motorControllerOutputVoltage = TIM_ConvertValueLinearApprox(adcBufferChannel.adcThrottle);
@@ -174,6 +173,21 @@ void HAL_ADC_ConvHalfCpltCallback(ADC_HandleTypeDef* hadc1){
 		default:
 			break;
 	}
+	// TEST CODE FOR AAC
+
+	PDP_StatusTypeDef AAG = PDP_AppsAgreement(adcBufferChannel.adcThrottle, adcBufferChannel.adcBPS);
+	switch (AAG){
+		case PDP_OKAY:
+			HAL_GPIO_WritePin(GPIOD, GPIO_PIN_14, GPIO_PIN_RESET);
+			break;
+		case PDP_ERROR:			// TODO add driver notifications and CAN logging for fault cases
+			HAL_GPIO_WritePin(GPIOD, GPIO_PIN_14, GPIO_PIN_SET);
+			break;
+		default:
+			break;
+	}
+
+	// TEST CODE END
 
 	HAL_GPIO_WritePin(GPIOD, GPIO_PIN_12, GPIO_PIN_SET);	// Flashing this LED lets us monitor the state
 }															// of the buffer using the oscilloscope

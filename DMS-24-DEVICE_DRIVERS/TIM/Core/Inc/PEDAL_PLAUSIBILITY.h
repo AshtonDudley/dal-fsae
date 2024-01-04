@@ -11,6 +11,7 @@
 /* INCLUDES	*/
 #include "stm32f4xx_hal.h"
 #include "stdbool.h"
+#include "stdlib.h"
 
 
 /**
@@ -33,5 +34,7 @@ typedef enum
 #define APPS_AAC_ERROR_THRESHOLD	10		// AAC %error Threshold as whole number (0-100)
 
 PDP_StatusTypeDef PDP_PedealAgreement(uint32_t apps, uint32_t fbps);
+
+PDP_StatusTypeDef PDP_AppsAgreement (uint32_t apps1, uint32_t apps2);
 
 #endif /* INC_PEDAL_PLAUSIBILITY_H_ */
