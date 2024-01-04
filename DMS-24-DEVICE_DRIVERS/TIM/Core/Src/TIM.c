@@ -118,10 +118,10 @@ void TIM_DeInterleave(adcBufferChannel_t *adcBuf, uint16_t unsortedBuf[]){ // TO
 		// if i is divisible by two, add it to the adcBPS buffer, otherwise add it
 		// to the adcThottle buffer
 		if (i % 2 == 0) {
-			adcBuf->adcBPS_buf[k] = *unsortedBuf[i]; 	// TODO FIX THIS AHHHHHH
+			adcBuf->adcBPS_buf[k] = unsortedBuf[i]; 	// TODO FIX THIS AHHHHHH
 		}
 		else {
-			adcBuf->adcThrottle_buf[k] = *unsortedBuf[i]; // TODO FIX THIS AHHHHHH
+			adcBuf->adcThrottle_buf[k] = unsortedBuf[i]; // TODO FIX THIS AHHHHHH
 			k++;
 		}
 	}
