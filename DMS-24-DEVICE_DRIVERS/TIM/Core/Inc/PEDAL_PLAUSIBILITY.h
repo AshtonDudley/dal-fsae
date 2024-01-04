@@ -13,7 +13,6 @@
 #include "stdbool.h"
 
 
-
 /**
   * @brief  HAL Status structures definition
   */
@@ -31,6 +30,7 @@ typedef enum
 #define FBPS_PAG_THRESHOLD 			19		// FBPS  Threshold 0.25V	(0.25V / 3.3V) * 256
 #define APPS_PAG_RESET_THRESHOLD	19		// RESET Threshold 0.25V	(0.25V / 3.3V) * 256
 
+#define APPS_AAC_ERROR_THRESHOLD	10		// AAC %error Threshold as whole number (0-100)
 
 PDP_StatusTypeDef PDP_PedealAgreement(uint32_t apps, uint32_t fbps);
 

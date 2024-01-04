@@ -40,7 +40,26 @@ PDP_StatusTypeDef PDP_PedealAgreement(uint32_t apps, uint32_t fbps){ 		// PAG_fa
 
 
 // TODO APPS AGREEMENT FAULT LOGIC
+/**
+  * @brief  APPS Agreement Check. Checks if both APPS sensors are within
+  * %error threshold of each other.
+  * @retval 0 no fault
+  * @retval 1 AAC_fault, difference between pedal sensors > %threshold
+  */
+PDP_StatusTypeDef PDP_AppsAgreement (uint32_t apps1, uint32_t apps2){
+	float percentError = (abs(apps2-apps1) / abs(apps1) ) * 100; 		// Calculating percent error
 
+	if (percentError >= APPS_AAC_ERROR_THRESHOLD || percentError <= APPS_AAC_ERROR_THRESHOLD){
+		AAC_fault = PDP_ERROR;
+		return AAC_fault;
+	}
+	else
+	{
+		AAC_fault = PDP_OKAY;
+		return AAC_fault;
+	}
+
+}
 // TODO SIGNAL PLAUSIBILITY FAULT LOGIC
 
 

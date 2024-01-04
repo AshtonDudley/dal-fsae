@@ -628,7 +628,7 @@ uint16_t TIM_Average(uint16_t adc_buffer[]){
   * using global variables
   * @retval None
   */
-void TIM_DeInterleave(adcBufferChannel_t *adcBuf, uint16_t unsortedBuf[]){ // TODO FIX THIS AHHHHHH
+void TIM_DeInterleave(adcBufferChannel_t *adcBuf, uint16_t unsortedBuf[]){
  80006a0:	b480      	push	{r7}
  80006a2:	b085      	sub	sp, #20
  80006a4:	af00      	add	r7, sp, #0
@@ -648,7 +648,7 @@ void TIM_DeInterleave(adcBufferChannel_t *adcBuf, uint16_t unsortedBuf[]){ // TO
  80006b6:	f003 0301 	and.w	r3, r3, #1
  80006ba:	2b00      	cmp	r3, #0
  80006bc:	d10c      	bne.n	80006d8 <TIM_DeInterleave+0x38>
-			adcBuf->adcBPS_buf[k] = unsortedBuf[i]; 	// TODO FIX THIS AHHHHHH
+			adcBuf->adcBPS_buf[k] = unsortedBuf[i];
  80006be:	68bb      	ldr	r3, [r7, #8]
  80006c0:	005b      	lsls	r3, r3, #1
  80006c2:	683a      	ldr	r2, [r7, #0]
@@ -664,7 +664,7 @@ void TIM_DeInterleave(adcBufferChannel_t *adcBuf, uint16_t unsortedBuf[]){ // TO
  80006d6:	e00b      	b.n	80006f0 <TIM_DeInterleave+0x50>
 		}
 		else {
-			adcBuf->adcThrottle_buf[k] = unsortedBuf[i]; // TODO FIX THIS AHHHHHH
+			adcBuf->adcThrottle_buf[k] = unsortedBuf[i];
  80006d8:	68bb      	ldr	r3, [r7, #8]
  80006da:	005b      	lsls	r3, r3, #1
  80006dc:	683a      	ldr	r2, [r7, #0]
