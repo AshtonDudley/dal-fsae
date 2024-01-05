@@ -24,13 +24,6 @@
 
 #define MAX_THROTTLE_PROFILE_NAME_LENGTH 8u
 
-typedef struct throttleProfileConfig_s {
-    uint8_t thrExpo;
-    uint8_t regenExpo;
-    uint8_t crossover;
-    uint8_t throttleProfile_Type;
-    char profileName[MAX_THROTTLE_PROFILE_NAME_LENGTH + 1]; // Descriptive name for throttle profile
-} throttleProfileConfig_t;
 
 typedef struct adcBufferChannel_s {
 	uint16_t adcAPPS1;

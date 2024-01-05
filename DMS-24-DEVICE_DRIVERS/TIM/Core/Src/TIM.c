@@ -14,50 +14,6 @@ uint16_t adc_buf[ADC_BUFFER_LEN];	 							// Interlaced ADC data
 adcBufferChannel_t adcBufferChannel = (adcBufferChannel_t){};	// De-Interlaced ADC Data
 
 
-throttleProfileConfig_t throttleProfileConfig = (throttleProfileConfig_t){
-	.thrExpo = 50,
-	.regenExpo = 50,
-	.crossover = 30
-};
-
-/**
- * @brief Scales throttle input so regen is < 0 and throttle is > 0
- * @return Scaled throttle values with regen -1 to 0 and throttle is 0 to 1
- */
-float TIM_GetScaledThrottle(float inputVal){
-	float maxVal = 1.00f - (throttleProfileConfig.crossover / 100.00f);
-	if (inputVal < 0.00f) {
-		maxVal = throttleProfileConfig.crossover / 100.00f;
-	}
-	return inputVal / maxVal;
-}
-
-
-float TIM_GetExpoedValue(float rawIn, float expoVal){
-	float expoF = expoVal / 100.00f;
-	float power5 = rawIn * rawIn * rawIn * rawIn * rawIn;
-	return power5 * expoF + rawIn  * (1.00f - expoF);
-}
-
-
-uint16_t TIM_ConvertValue(uint16_t inputValue)
-{
-	float inputPos = (inputValue / 255.00f) - (throttleProfileConfig.crossover / 100.00f); // Scale 0-1 and then shift down so regen is - and throttle is positive.
-	float crossoverF = (throttleProfileConfig.crossover / 100.00f);
-	float scaledThrottle = TIM_GetScaledThrottle(inputPos);
-	float expoedThrottle = 0.00f;
-	float throttleOut = 0.00f;
-
-	if (scaledThrottle < 0.00f){
-		expoedThrottle = TIM_GetExpoedValue(scaledThrottle, throttleProfileConfig.thrExpo);
-		throttleOut = expoedThrottle * crossoverF + crossoverF;
-	} else {
-		expoedThrottle = TIM_GetExpoedValue(scaledThrottle, throttleProfileConfig.regenExpo);
-		throttleOut = expoedThrottle * (1.00f - crossoverF) + crossoverF;
-	}
-
-	return throttleOut * 4096;
-}
 
 
 /**
