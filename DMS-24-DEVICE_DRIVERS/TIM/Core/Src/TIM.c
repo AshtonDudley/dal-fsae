@@ -107,7 +107,7 @@ void HAL_ADC_ConvHalfCpltCallback(ADC_HandleTypeDef* hadc1){
 
 	// Average the first half of the buffer
 	HAL_GPIO_WritePin(GPIOD, GPIO_PIN_12, GPIO_PIN_SET);	// DEBUG LED TOGGLE FOR TIME PROFILE
-	adcBufferChannel.adcAPPS1 =	TIM_DeInterleave(adc_buf, 0, 64); 	// TODO
+	adcBufferChannel.adcAPPS1 =	TIM_DeInterleave(adc_buf, 0, 64); 		// TODO
 	adcBufferChannel.adcBPS 	 =	TIM_DeInterleave(adc_buf, 1, 64); 	// TODO
 	HAL_GPIO_WritePin(GPIOD, GPIO_PIN_12, GPIO_PIN_RESET);	// DEBUG LED TOGGLE FOR TIME PROFILE
 
