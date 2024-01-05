@@ -26,9 +26,6 @@ thottleMap_t currentThottleMap = (thottleMap_t) {
  */
 uint16_t TIM_ConvertValueLinearApprox(uint16_t inputValue, thottleMap_t *thottleMap)
 {
-	//float xarray[] = {0.0f, 25.6f, 51.2f, 76.8f, 102.4f, 128.0f, 153.6f, 179.2f, 204.8f, 230.4f, 256.0f};	// NOTE: The last value on this array MUST be larger then the largest possible ADC input value
-	//float yarray[] = {0.0f, 102.4f, 307.2f, 512.0f, 819.2f, 1228.8f, 1638.4f, 2048.0f, 2457.6f, 3072.0f, 4096.0f};
-
 
 	float x0 = 0.0f, x1 = 0.0f, y0 = 0.0f, y1 = 0.0f;
 
