@@ -19,8 +19,10 @@
 #define ADC_BUFFER_LEN 			4096 	// must be a power of two, when divided by the total number of ADC channels//
 #define ADC_CHANNEL_BUFFER_LEN 	2048 	// buffer length per ADC channel, must be divisible into ADC_BUFFER_LEN
 
-#define APPS1_BUF_ADDR 	0;				// Which array element APPS1 data in the ADC array begins
-#define BPS_BUF_ADDR 	1;				// Which array element BPS data in the ADC array begins
+#define APPS1_BUF_ADDR 			0		// Which array element APPS1 data in the ADC array begins
+#define BPS_BUF_ADDR 			1		// Which array element BPS data in the ADC array begins
+
+#define CUT_MOTOR_SIGNAL		0		// Value to cut thottle signal to the motor, should be within regen dead zone
 
 
 typedef struct adcBufferChannel_s {

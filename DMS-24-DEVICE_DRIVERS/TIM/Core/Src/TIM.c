@@ -10,7 +10,7 @@
 
 extern DAC_HandleTypeDef hdac;
 
-volatile uint16_t adc_buf[ADC_BUFFER_LEN];	 					// Interlaced ADC data,  the buffer size can be increased to add a delay
+uint16_t adc_buf[ADC_BUFFER_LEN];	 					// Interlaced ADC data,  the buffer size can be increased to add a delay
 																// in ADC processing, can be useful if the main function is stuck.
 adcBufferChannel_t adcBufferChannel = (adcBufferChannel_t){};	// De-Interlaced ADC Data
 
@@ -119,10 +119,13 @@ void HAL_ADC_ConvHalfCpltCallback(ADC_HandleTypeDef* hadc1){
 			TIM_OutputDAC(motorControllerOutputVoltage);
 			break;
 		case PDP_ERROR:			// TODO add driver notifications and CAN logging for fault cases
+			TIM_OutputDAC(CUT_MOTOR_SIGNAL);
 			break;
 		case PDP_RESET_LATCH:	// TODO add driver notifications and CAN logging for fault cases
 			break;
+			TIM_OutputDAC(CUT_MOTOR_SIGNAL);
 		default:
+			TIM_OutputDAC(CUT_MOTOR_SIGNAL);
 			break;
 	}
 	// TEST CODE FOR AAC
@@ -138,6 +141,8 @@ void HAL_ADC_ConvHalfCpltCallback(ADC_HandleTypeDef* hadc1){
 		default:
 			break;
 	}
+
+	// END TEST CODE FOR AAC
 
 
 	HAL_GPIO_WritePin(GPIOD, GPIO_PIN_12, GPIO_PIN_RESET);	// DEBUG LED TOGGLE FOR TIME PROFILE
