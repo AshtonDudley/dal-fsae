@@ -111,9 +111,9 @@ uint16_t TIM_Average(uint16_t adc_buffer[]){	// TODO FIX THIS ASAP ADC_CHANNEL_B
   * using global variables
   * @retval None
   */
-void TIM_DeInterleave(adcBufferChannel_t *adcBuf, uint16_t unsortedBuf[]){
+void TIM_DeInterleave(adcBufferChannel_t *adcBuf, uint16_t unsortedBuf[], uint16_t depth){
 	int k = 0;
-	for (int i = 0; i < ADC_BUFFER_LEN; i++) {
+	for (int i = 0;  i < ADC_BUFFER_LEN; i++) {
 		// if i is divisible by two, add it to the adcBPS buffer, otherwise add it
 		// to the adcThottle buffer
 		if (i % 2 == 0) {
@@ -153,8 +153,9 @@ void TIM_Init(ADC_HandleTypeDef *TIM_hadc1){
   * @retval None
   */
 void HAL_ADC_ConvHalfCpltCallback(ADC_HandleTypeDef* hadc1){
-	HAL_GPIO_WritePin(GPIOD, GPIO_PIN_12, GPIO_PIN_SET);	// DEBUG
+	HAL_GPIO_WritePin(GPIOD, GPIO_PIN_12, GPIO_PIN_SET);	// DEBUG LED TOGGLE FOR TIME PROFILE
 	TIM_DeInterleave(&adcBufferChannel, adc_buf);
+	HAL_GPIO_WritePin(GPIOD, GPIO_PIN_12, GPIO_PIN_RESET);	// DEBUG LED TOGGLE FOR TIME PROFILE
 
 	// Average the first half of the buffer
 	adcBufferChannel.adcThrottle =	TIM_Average(adcBufferChannel.adcThrottle_buf);
@@ -189,7 +190,7 @@ void HAL_ADC_ConvHalfCpltCallback(ADC_HandleTypeDef* hadc1){
 	}
 
 	// TEST CODE END
-	HAL_GPIO_WritePin(GPIOD, GPIO_PIN_12, GPIO_PIN_RESET);	// DEBUG
+
 	// HAL_GPIO_WritePin(GPIOD, GPIO_PIN_12, GPIO_PIN_SET);	// Flashing this LED lets us monitor the state
 }															// of the buffer using the oscilloscope
 
