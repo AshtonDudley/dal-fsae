@@ -108,8 +108,8 @@ void HAL_ADC_ConvHalfCpltCallback(ADC_HandleTypeDef* hadc1){
 
 	// Average the first half of the buffer
 	HAL_GPIO_WritePin(GPIOD, GPIO_PIN_12, GPIO_PIN_SET);	// DEBUG LED TOGGLE FOR TIME PROFILE
-	adcBufferChannel.adcAPPS1	 =	TIM_DeInterleave(adc_buf, 0, 64); 	// The depth can be changed to control how many values we average
-	adcBufferChannel.adcBPS 	 =	TIM_DeInterleave(adc_buf, 1, 64);
+	adcBufferChannel.adcAPPS1  =	TIM_DeInterleave(adc_buf, 0, 64); 	// The depth can be changed to control how many values we average
+	adcBufferChannel.adcBPS    =	TIM_DeInterleave(adc_buf, 1, 64);
 
 	// Plausibility Checks
 	PDP_StatusTypeDef PAG = PDP_PedealAgreement(adcBufferChannel.adcAPPS1, adcBufferChannel.adcBPS);
