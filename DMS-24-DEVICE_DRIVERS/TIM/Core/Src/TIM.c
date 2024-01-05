@@ -111,19 +111,13 @@ uint16_t TIM_Average(uint16_t adc_buffer[], uint16_t depth){	// TODO FIX THIS AS
   * using global variables
   * @retval None
   */
-void TIM_DeInterleave(adcBufferChannel_t *adcBuf, uint16_t unsortedBuf[]){
-	int k = 0;
-	for (int i = 0;  i < ADC_BUFFER_LEN; i++) {
-		// if i is divisible by two, add it to the adcBPS buffer, otherwise add it
-		// to the adcThottle buffer
-		if (i % 2 == 0) {
-			adcBuf->adcBPS_buf[k] = unsortedBuf[i];
-		}
-		else {
-			adcBuf->adcThrottle_buf[k] = unsortedBuf[i];
-			k++;
-		}
+uint16_t TIM_DeInterleave(uint16_t unsortedBuf[], uint16_t startPoint, uint16_t depth) {
+	uint16_t DeInterleavedBuf[ADC_CHANNEL_BUFFER_LEN];
+
+	for (int i = 0, j = 0; i < (depth + startPoint); i++, j += 2) {
+		DeInterleavedBuf[i] = unsortedBuf[j + startPoint];
 	}
+	return TIM_Average(DeInterleavedBuf, depth);
 }
 
 
@@ -153,19 +147,19 @@ void TIM_Init(ADC_HandleTypeDef *TIM_hadc1){
   * @retval None
   */
 void HAL_ADC_ConvHalfCpltCallback(ADC_HandleTypeDef* hadc1){
-	HAL_GPIO_WritePin(GPIOD, GPIO_PIN_12, GPIO_PIN_SET);	// DEBUG LED TOGGLE FOR TIME PROFILE
-	TIM_DeInterleave(&adcBufferChannel, adc_buf);
-	HAL_GPIO_WritePin(GPIOD, GPIO_PIN_12, GPIO_PIN_RESET);	// DEBUG LED TOGGLE FOR TIME PROFILE
+	//TIM_DeInterleave(&adcBufferChannel, adc_buf);
 
 	// Average the first half of the buffer
-	// adcBufferChannel.adcThrottle =	TIM_Average(adcBufferChannel.adcThrottle_buf); 	// TODO
-	// adcBufferChannel.adcBPS 	 =	TIM_Average(adcBufferChannel.adcBPS_buf);			// TODO
+	HAL_GPIO_WritePin(GPIOD, GPIO_PIN_12, GPIO_PIN_SET);	// DEBUG LED TOGGLE FOR TIME PROFILE
+	adcBufferChannel.adcAPPS1 =	TIM_DeInterleave(adc_buf, 0, 64); 	// TODO
+	adcBufferChannel.adcBPS 	 =	TIM_DeInterleave(adc_buf, 1, 64); 	// TODO
+	HAL_GPIO_WritePin(GPIOD, GPIO_PIN_12, GPIO_PIN_RESET);	// DEBUG LED TOGGLE FOR TIME PROFILE
 
 	// Plausibility Checks
-	PDP_StatusTypeDef PAG = PDP_PedealAgreement(adcBufferChannel.adcThrottle, adcBufferChannel.adcBPS);
+	PDP_StatusTypeDef PAG = PDP_PedealAgreement(adcBufferChannel.adcAPPS1, adcBufferChannel.adcBPS);
 	switch (PAG){
 		case PDP_OKAY:
-			uint32_t motorControllerOutputVoltage = TIM_ConvertValueLinearApprox(adcBufferChannel.adcThrottle);
+			uint32_t motorControllerOutputVoltage = TIM_ConvertValueLinearApprox(adcBufferChannel.adcAPPS1);
 			TIM_OutputDAC(motorControllerOutputVoltage);
 			break;
 		case PDP_ERROR:			// TODO add driver notifications and CAN logging for fault cases
@@ -177,7 +171,7 @@ void HAL_ADC_ConvHalfCpltCallback(ADC_HandleTypeDef* hadc1){
 	}
 	// TEST CODE FOR AAC
 
-	PDP_StatusTypeDef AAG = PDP_AppsAgreement(adcBufferChannel.adcThrottle, adcBufferChannel.adcBPS);
+	PDP_StatusTypeDef AAG = PDP_AppsAgreement(adcBufferChannel.adcAPPS1, adcBufferChannel.adcBPS);
 	switch (AAG){
 		case PDP_OKAY:
 			HAL_GPIO_WritePin(GPIOD, GPIO_PIN_14, GPIO_PIN_RESET);

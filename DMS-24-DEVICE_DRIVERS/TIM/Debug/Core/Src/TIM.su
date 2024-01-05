@@ -3,8 +3,8 @@
 ../Core/Src/TIM.c:43:10:TIM_ConvertValue	40	static
 ../Core/Src/TIM.c:67:10:TIM_ConvertValueLinearApprox	136	static
 ../Core/Src/TIM.c:99:10:TIM_Average	32	static
-../Core/Src/TIM.c:114:6:TIM_DeInterleave	24	static
-../Core/Src/TIM.c:137:6:TIM_OutputDAC	16	static
-../Core/Src/TIM.c:147:6:TIM_Init	16	static
-../Core/Src/TIM.c:155:6:HAL_ADC_ConvHalfCpltCallback	32	static
-../Core/Src/TIM.c:202:6:HAL_ADC_ConvCpltCallback	16	static
+../Core/Src/TIM.c:114:10:TIM_DeInterleave	4120	static
+../Core/Src/TIM.c:131:6:TIM_OutputDAC	16	static
+../Core/Src/TIM.c:141:6:TIM_Init	16	static
+../Core/Src/TIM.c:149:6:HAL_ADC_ConvHalfCpltCallback	32	static
+../Core/Src/TIM.c:196:6:HAL_ADC_ConvCpltCallback	16	static
