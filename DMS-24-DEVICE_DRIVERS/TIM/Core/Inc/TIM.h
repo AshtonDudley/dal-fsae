@@ -14,26 +14,17 @@
 #include "PEDAL_PLAUSIBILITY.h"
 
 
+/* 	DEFINES 	*/
 
+#define ADC_BUFFER_LEN 			4096 	// must be a power of two, when divided by the total number of ADC channels//
+#define ADC_CHANNEL_BUFFER_LEN 	2048 	// buffer length per ADC channel, must be divisible into ADC_BUFFER_LEN
 
+#define APPS1_BUF_ADDR 	0;				// Which array element APPS1 data in the ADC array begins
+#define BPS_BUF_ADDR 	1;				// Which array element BPS data in the ADC array begins
 
-#define ADC_BUFFER_LEN 128 			// must be a power of two, when divided by the total number of ADC channels//
-#define ADC_CHANNEL_BUFFER_LEN 64 	//buffer length per ADC channel, must be divisible into ADC_BUFFER_LEN
-
-#define MAX_THROTTLE_PROFILE_NAME_LENGTH 8u
-
-typedef struct throttleProfileConfig_s {
-    uint8_t thrExpo;
-    uint8_t regenExpo;
-    uint8_t crossover;
-    uint8_t throttleProfile_Type;
-    char profileName[MAX_THROTTLE_PROFILE_NAME_LENGTH + 1]; // Descriptive name for throttle profile
-} throttleProfileConfig_t;
 
 typedef struct adcBufferChannel_s {
-	uint16_t adcThrottle_buf[ADC_CHANNEL_BUFFER_LEN];
-	uint16_t adcThrottle;
-	uint16_t adcBPS_buf[ADC_CHANNEL_BUFFER_LEN];
+	uint16_t adcAPPS1;
 	uint16_t adcBPS;
 }adcBufferChannel_t;
 
@@ -49,9 +40,9 @@ uint16_t TIM_ConvertValue(uint16_t inputValue);
 
 uint16_t TIM_ConvertValueLinearApprox(uint16_t inputValue);
 
-uint16_t TIM_Average(uint16_t adc_buffer[]);
+uint16_t TIM_Average(uint16_t adc_buffer[], uint16_t depth);
 
-void TIM_DeInterleave(adcBufferChannel_t *adcBuf, uint16_t unsortedBuf[]);
+uint16_t TIM_DeInterleave(uint16_t unsortedBuf[], uint16_t startPoint, uint16_t depth);
 
 void TIM_OutputDAC(uint16_t DAC_Output);
 

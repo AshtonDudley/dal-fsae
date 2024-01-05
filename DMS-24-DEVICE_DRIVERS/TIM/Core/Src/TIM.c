@@ -14,50 +14,6 @@ uint16_t adc_buf[ADC_BUFFER_LEN];	 							// Interlaced ADC data
 adcBufferChannel_t adcBufferChannel = (adcBufferChannel_t){};	// De-Interlaced ADC Data
 
 
-throttleProfileConfig_t throttleProfileConfig = (throttleProfileConfig_t){
-	.thrExpo = 50,
-	.regenExpo = 50,
-	.crossover = 30
-};
-
-/**
- * @brief Scales throttle input so regen is < 0 and throttle is > 0
- * @return Scaled throttle values with regen -1 to 0 and throttle is 0 to 1
- */
-float TIM_GetScaledThrottle(float inputVal){
-	float maxVal = 1.00f - (throttleProfileConfig.crossover / 100.00f);
-	if (inputVal < 0.00f) {
-		maxVal = throttleProfileConfig.crossover / 100.00f;
-	}
-	return inputVal / maxVal;
-}
-
-
-float TIM_GetExpoedValue(float rawIn, float expoVal){
-	float expoF = expoVal / 100.00f;
-	float power5 = rawIn * rawIn * rawIn * rawIn * rawIn;
-	return power5 * expoF + rawIn  * (1.00f - expoF);
-}
-
-
-uint16_t TIM_ConvertValue(uint16_t inputValue)
-{
-	float inputPos = (inputValue / 255.00f) - (throttleProfileConfig.crossover / 100.00f); // Scale 0-1 and then shift down so regen is - and throttle is positive.
-	float crossoverF = (throttleProfileConfig.crossover / 100.00f);
-	float scaledThrottle = TIM_GetScaledThrottle(inputPos);
-	float expoedThrottle = 0.00f;
-	float throttleOut = 0.00f;
-
-	if (scaledThrottle < 0.00f){
-		expoedThrottle = TIM_GetExpoedValue(scaledThrottle, throttleProfileConfig.thrExpo);
-		throttleOut = expoedThrottle * crossoverF + crossoverF;
-	} else {
-		expoedThrottle = TIM_GetExpoedValue(scaledThrottle, throttleProfileConfig.regenExpo);
-		throttleOut = expoedThrottle * (1.00f - crossoverF) + crossoverF;
-	}
-
-	return throttleOut * 4096;
-}
 
 
 /**
@@ -96,12 +52,12 @@ uint16_t TIM_ConvertValueLinearApprox(uint16_t inputValue)
   * @todo Replace with a moving average algorithm, for large buffer sizes, an overflow may occur
   * @return averages first half the the input arrays
   */
-uint16_t TIM_Average(uint16_t adc_buffer[]){
+uint16_t TIM_Average(uint16_t adc_buffer[], uint16_t depth){	// TODO FIX THIS ASAP ADC_CHANNEL_BUFFER_LEN / 2
 	uint32_t total = 0;
-	for (int i = 0; i < (ADC_CHANNEL_BUFFER_LEN / 2); i++) {  	// TODO Change buffer since to channel size
+	for (int i = 0; i < (depth / 2); i++) {  	// TODO Change buffer since to channel size
 		total += adc_buffer[i];									// TODO Change to moving average
 	}
-	uint16_t avg = total / (ADC_CHANNEL_BUFFER_LEN / 2);
+	uint16_t avg = total / (depth / 2);
 	return avg;
 }
 /**
@@ -111,19 +67,13 @@ uint16_t TIM_Average(uint16_t adc_buffer[]){
   * using global variables
   * @retval None
   */
-void TIM_DeInterleave(adcBufferChannel_t *adcBuf, uint16_t unsortedBuf[]){
-	int k = 0;
-	for (int i = 0; i < ADC_BUFFER_LEN; i++) {
-		// if i is divisible by two, add it to the adcBPS buffer, otherwise add it
-		// to the adcThottle buffer
-		if (i % 2 == 0) {
-			adcBuf->adcBPS_buf[k] = unsortedBuf[i];
-		}
-		else {
-			adcBuf->adcThrottle_buf[k] = unsortedBuf[i];
-			k++;
-		}
+uint16_t TIM_DeInterleave(uint16_t unsortedBuf[], uint16_t startPoint, uint16_t depth) {
+	uint16_t DeInterleavedBuf[ADC_CHANNEL_BUFFER_LEN];
+
+	for (int i = 0, j = 0; i < (depth + startPoint); i++, j += 2) {
+		DeInterleavedBuf[i] = unsortedBuf[j + startPoint];
 	}
+	return TIM_Average(DeInterleavedBuf, depth);
 }
 
 
@@ -153,17 +103,19 @@ void TIM_Init(ADC_HandleTypeDef *TIM_hadc1){
   * @retval None
   */
 void HAL_ADC_ConvHalfCpltCallback(ADC_HandleTypeDef* hadc1){
-	TIM_DeInterleave(&adcBufferChannel, adc_buf);
+	//TIM_DeInterleave(&adcBufferChannel, adc_buf);
 
 	// Average the first half of the buffer
-	adcBufferChannel.adcThrottle =	TIM_Average(adcBufferChannel.adcThrottle_buf);
-	adcBufferChannel.adcBPS 	 =	TIM_Average(adcBufferChannel.adcBPS_buf);
+	HAL_GPIO_WritePin(GPIOD, GPIO_PIN_12, GPIO_PIN_SET);	// DEBUG LED TOGGLE FOR TIME PROFILE
+	adcBufferChannel.adcAPPS1 =	TIM_DeInterleave(adc_buf, 0, 64); 		// TODO
+	adcBufferChannel.adcBPS 	 =	TIM_DeInterleave(adc_buf, 1, 64); 	// TODO
+	HAL_GPIO_WritePin(GPIOD, GPIO_PIN_12, GPIO_PIN_RESET);	// DEBUG LED TOGGLE FOR TIME PROFILE
 
 	// Plausibility Checks
-	PDP_StatusTypeDef PAG = PDP_PedealAgreement(adcBufferChannel.adcThrottle, adcBufferChannel.adcBPS);
+	PDP_StatusTypeDef PAG = PDP_PedealAgreement(adcBufferChannel.adcAPPS1, adcBufferChannel.adcBPS);
 	switch (PAG){
 		case PDP_OKAY:
-			uint32_t motorControllerOutputVoltage = TIM_ConvertValueLinearApprox(adcBufferChannel.adcThrottle);
+			uint32_t motorControllerOutputVoltage = TIM_ConvertValueLinearApprox(adcBufferChannel.adcAPPS1);
 			TIM_OutputDAC(motorControllerOutputVoltage);
 			break;
 		case PDP_ERROR:			// TODO add driver notifications and CAN logging for fault cases
@@ -175,7 +127,7 @@ void HAL_ADC_ConvHalfCpltCallback(ADC_HandleTypeDef* hadc1){
 	}
 	// TEST CODE FOR AAC
 
-	PDP_StatusTypeDef AAG = PDP_AppsAgreement(adcBufferChannel.adcThrottle, adcBufferChannel.adcBPS);
+	PDP_StatusTypeDef AAG = PDP_AppsAgreement(adcBufferChannel.adcAPPS1, adcBufferChannel.adcBPS);
 	switch (AAG){
 		case PDP_OKAY:
 			HAL_GPIO_WritePin(GPIOD, GPIO_PIN_14, GPIO_PIN_RESET);
@@ -189,7 +141,7 @@ void HAL_ADC_ConvHalfCpltCallback(ADC_HandleTypeDef* hadc1){
 
 	// TEST CODE END
 
-	HAL_GPIO_WritePin(GPIOD, GPIO_PIN_12, GPIO_PIN_SET);	// Flashing this LED lets us monitor the state
+	// HAL_GPIO_WritePin(GPIOD, GPIO_PIN_12, GPIO_PIN_SET);	// Flashing this LED lets us monitor the state
 }															// of the buffer using the oscilloscope
 
 
@@ -198,6 +150,6 @@ void HAL_ADC_ConvHalfCpltCallback(ADC_HandleTypeDef* hadc1){
   * @retval None
   */
 void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc1){
-	HAL_GPIO_WritePin(GPIOD, GPIO_PIN_12, GPIO_PIN_RESET);
+	// HAL_GPIO_WritePin(GPIOD, GPIO_PIN_12, GPIO_PIN_RESET);
 }
 
