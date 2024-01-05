@@ -96,12 +96,12 @@ uint16_t TIM_ConvertValueLinearApprox(uint16_t inputValue)
   * @todo Replace with a moving average algorithm, for large buffer sizes, an overflow may occur
   * @return averages first half the the input arrays
   */
-uint16_t TIM_Average(uint16_t adc_buffer[]){	// TODO FIX THIS ASAP ADC_CHANNEL_BUFFER_LEN / 2
+uint16_t TIM_Average(uint16_t adc_buffer[], uint16_t depth){	// TODO FIX THIS ASAP ADC_CHANNEL_BUFFER_LEN / 2
 	uint32_t total = 0;
-	for (int i = 0; i < (ADC_CHANNEL_BUFFER_LEN / 2); i++) {  	// TODO Change buffer since to channel size
+	for (int i = 0; i < (depth / 2); i++) {  	// TODO Change buffer since to channel size
 		total += adc_buffer[i];									// TODO Change to moving average
 	}
-	uint16_t avg = total / (ADC_CHANNEL_BUFFER_LEN / 2);
+	uint16_t avg = total / (depth / 2);
 	return avg;
 }
 /**
@@ -111,7 +111,7 @@ uint16_t TIM_Average(uint16_t adc_buffer[]){	// TODO FIX THIS ASAP ADC_CHANNEL_B
   * using global variables
   * @retval None
   */
-void TIM_DeInterleave(adcBufferChannel_t *adcBuf, uint16_t unsortedBuf[], uint16_t depth){
+void TIM_DeInterleave(adcBufferChannel_t *adcBuf, uint16_t unsortedBuf[]){
 	int k = 0;
 	for (int i = 0;  i < ADC_BUFFER_LEN; i++) {
 		// if i is divisible by two, add it to the adcBPS buffer, otherwise add it
@@ -158,8 +158,8 @@ void HAL_ADC_ConvHalfCpltCallback(ADC_HandleTypeDef* hadc1){
 	HAL_GPIO_WritePin(GPIOD, GPIO_PIN_12, GPIO_PIN_RESET);	// DEBUG LED TOGGLE FOR TIME PROFILE
 
 	// Average the first half of the buffer
-	adcBufferChannel.adcThrottle =	TIM_Average(adcBufferChannel.adcThrottle_buf);
-	adcBufferChannel.adcBPS 	 =	TIM_Average(adcBufferChannel.adcBPS_buf);
+	// adcBufferChannel.adcThrottle =	TIM_Average(adcBufferChannel.adcThrottle_buf); 	// TODO
+	// adcBufferChannel.adcBPS 	 =	TIM_Average(adcBufferChannel.adcBPS_buf);			// TODO
 
 	// Plausibility Checks
 	PDP_StatusTypeDef PAG = PDP_PedealAgreement(adcBufferChannel.adcThrottle, adcBufferChannel.adcBPS);
