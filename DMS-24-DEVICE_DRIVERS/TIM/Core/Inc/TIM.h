@@ -22,8 +22,6 @@
 #define APPS1_BUF_ADDR 	0;				// Which array element APPS1 data in the ADC array begins
 #define BPS_BUF_ADDR 	1;				// Which array element BPS data in the ADC array begins
 
-#define MAX_THROTTLE_PROFILE_NAME_LENGTH 8u
-
 
 typedef struct adcBufferChannel_s {
 	uint16_t adcAPPS1;
