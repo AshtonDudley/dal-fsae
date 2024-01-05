@@ -39,15 +39,15 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY, DEBUGGING, OCTETS
  17 .debug_rnglists 00000a67  00000000  00000000  000306b0  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 18 .debug_macro  00022dd4  00000000  00000000  00031117  2**0
+ 18 .debug_macro  00022dce  00000000  00000000  00031117  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 19 .debug_line   000100f2  00000000  00000000  00053eeb  2**0
+ 19 .debug_line   000100f2  00000000  00000000  00053ee5  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 20 .debug_str    000d8f82  00000000  00000000  00063fdd  2**0
+ 20 .debug_str    000d8f5e  00000000  00000000  00063fd7  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 21 .debug_frame  000038d4  00000000  00000000  0013cf60  2**2
+ 21 .debug_frame  000038d4  00000000  00000000  0013cf38  2**2
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 22 .debug_line_str 00000059  00000000  00000000  00140834  2**0
+ 22 .debug_line_str 00000059  00000000  00000000  0014080c  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
 
 Disassembly of section .text:
@@ -868,7 +868,7 @@ void HAL_ADC_ConvHalfCpltCallback(ADC_HandleTypeDef* hadc1){
  800087a:	f44f 5180 	mov.w	r1, #4096	; 0x1000
  800087e:	4832      	ldr	r0, [pc, #200]	; (8000948 <HAL_ADC_ConvHalfCpltCallback+0xd8>)
  8000880:	f002 fa48 	bl	8002d14 <HAL_GPIO_WritePin>
-	adcBufferChannel.adcAPPS1 =	TIM_DeInterleave(adc_buf, 0, 64); 	// TODO
+	adcBufferChannel.adcAPPS1 =	TIM_DeInterleave(adc_buf, 0, 64); 		// TODO
  8000884:	2240      	movs	r2, #64	; 0x40
  8000886:	2100      	movs	r1, #0
  8000888:	4830      	ldr	r0, [pc, #192]	; (800094c <HAL_ADC_ConvHalfCpltCallback+0xdc>)
@@ -886,107 +886,107 @@ void HAL_ADC_ConvHalfCpltCallback(ADC_HandleTypeDef* hadc1){
  80008a2:	461a      	mov	r2, r3
  80008a4:	4b2a      	ldr	r3, [pc, #168]	; (8000950 <HAL_ADC_ConvHalfCpltCallback+0xe0>)
  80008a6:	805a      	strh	r2, [r3, #2]
-	HAL_GPIO_WritePin(GPIOD, GPIO_PIN_12, GPIO_PIN_RESET);	// DEBUG LED TOGGLE FOR TIME PROFILE
- 80008a8:	2200      	movs	r2, #0
- 80008aa:	f44f 5180 	mov.w	r1, #4096	; 0x1000
- 80008ae:	4826      	ldr	r0, [pc, #152]	; (8000948 <HAL_ADC_ConvHalfCpltCallback+0xd8>)
- 80008b0:	f002 fa30 	bl	8002d14 <HAL_GPIO_WritePin>
 
 	// Plausibility Checks
 	PDP_StatusTypeDef PAG = PDP_PedealAgreement(adcBufferChannel.adcAPPS1, adcBufferChannel.adcBPS);
- 80008b4:	4b26      	ldr	r3, [pc, #152]	; (8000950 <HAL_ADC_ConvHalfCpltCallback+0xe0>)
- 80008b6:	881b      	ldrh	r3, [r3, #0]
- 80008b8:	461a      	mov	r2, r3
- 80008ba:	4b25      	ldr	r3, [pc, #148]	; (8000950 <HAL_ADC_ConvHalfCpltCallback+0xe0>)
- 80008bc:	885b      	ldrh	r3, [r3, #2]
- 80008be:	4619      	mov	r1, r3
- 80008c0:	4610      	mov	r0, r2
- 80008c2:	f7ff fdff 	bl	80004c4 <PDP_PedealAgreement>
- 80008c6:	4603      	mov	r3, r0
- 80008c8:	75fb      	strb	r3, [r7, #23]
+ 80008a8:	4b29      	ldr	r3, [pc, #164]	; (8000950 <HAL_ADC_ConvHalfCpltCallback+0xe0>)
+ 80008aa:	881b      	ldrh	r3, [r3, #0]
+ 80008ac:	461a      	mov	r2, r3
+ 80008ae:	4b28      	ldr	r3, [pc, #160]	; (8000950 <HAL_ADC_ConvHalfCpltCallback+0xe0>)
+ 80008b0:	885b      	ldrh	r3, [r3, #2]
+ 80008b2:	4619      	mov	r1, r3
+ 80008b4:	4610      	mov	r0, r2
+ 80008b6:	f7ff fe05 	bl	80004c4 <PDP_PedealAgreement>
+ 80008ba:	4603      	mov	r3, r0
+ 80008bc:	75fb      	strb	r3, [r7, #23]
 	switch (PAG){
- 80008ca:	7dfb      	ldrb	r3, [r7, #23]
- 80008cc:	2b02      	cmp	r3, #2
- 80008ce:	d013      	beq.n	80008f8 <HAL_ADC_ConvHalfCpltCallback+0x88>
- 80008d0:	2b02      	cmp	r3, #2
- 80008d2:	dc13      	bgt.n	80008fc <HAL_ADC_ConvHalfCpltCallback+0x8c>
- 80008d4:	2b00      	cmp	r3, #0
- 80008d6:	d002      	beq.n	80008de <HAL_ADC_ConvHalfCpltCallback+0x6e>
- 80008d8:	2b01      	cmp	r3, #1
- 80008da:	d011      	beq.n	8000900 <HAL_ADC_ConvHalfCpltCallback+0x90>
+ 80008be:	7dfb      	ldrb	r3, [r7, #23]
+ 80008c0:	2b02      	cmp	r3, #2
+ 80008c2:	d013      	beq.n	80008ec <HAL_ADC_ConvHalfCpltCallback+0x7c>
+ 80008c4:	2b02      	cmp	r3, #2
+ 80008c6:	dc13      	bgt.n	80008f0 <HAL_ADC_ConvHalfCpltCallback+0x80>
+ 80008c8:	2b00      	cmp	r3, #0
+ 80008ca:	d002      	beq.n	80008d2 <HAL_ADC_ConvHalfCpltCallback+0x62>
+ 80008cc:	2b01      	cmp	r3, #1
+ 80008ce:	d011      	beq.n	80008f4 <HAL_ADC_ConvHalfCpltCallback+0x84>
 		case PDP_ERROR:			// TODO add driver notifications and CAN logging for fault cases
 			break;
 		case PDP_RESET_LATCH:	// TODO add driver notifications and CAN logging for fault cases
 			break;
 		default:
 			break;
- 80008dc:	e00e      	b.n	80008fc <HAL_ADC_ConvHalfCpltCallback+0x8c>
+ 80008d0:	e00e      	b.n	80008f0 <HAL_ADC_ConvHalfCpltCallback+0x80>
 			uint32_t motorControllerOutputVoltage = TIM_ConvertValueLinearApprox(adcBufferChannel.adcAPPS1);
- 80008de:	4b1c      	ldr	r3, [pc, #112]	; (8000950 <HAL_ADC_ConvHalfCpltCallback+0xe0>)
- 80008e0:	881b      	ldrh	r3, [r3, #0]
- 80008e2:	4618      	mov	r0, r3
- 80008e4:	f7ff fe6e 	bl	80005c4 <TIM_ConvertValueLinearApprox>
- 80008e8:	4603      	mov	r3, r0
- 80008ea:	613b      	str	r3, [r7, #16]
+ 80008d2:	4b1f      	ldr	r3, [pc, #124]	; (8000950 <HAL_ADC_ConvHalfCpltCallback+0xe0>)
+ 80008d4:	881b      	ldrh	r3, [r3, #0]
+ 80008d6:	4618      	mov	r0, r3
+ 80008d8:	f7ff fe74 	bl	80005c4 <TIM_ConvertValueLinearApprox>
+ 80008dc:	4603      	mov	r3, r0
+ 80008de:	613b      	str	r3, [r7, #16]
 			TIM_OutputDAC(motorControllerOutputVoltage);
- 80008ec:	693b      	ldr	r3, [r7, #16]
- 80008ee:	b29b      	uxth	r3, r3
- 80008f0:	4618      	mov	r0, r3
- 80008f2:	f7ff ff9b 	bl	800082c <TIM_OutputDAC>
+ 80008e0:	693b      	ldr	r3, [r7, #16]
+ 80008e2:	b29b      	uxth	r3, r3
+ 80008e4:	4618      	mov	r0, r3
+ 80008e6:	f7ff ffa1 	bl	800082c <TIM_OutputDAC>
 			break;
- 80008f6:	e004      	b.n	8000902 <HAL_ADC_ConvHalfCpltCallback+0x92>
+ 80008ea:	e004      	b.n	80008f6 <HAL_ADC_ConvHalfCpltCallback+0x86>
 			break;
- 80008f8:	bf00      	nop
- 80008fa:	e002      	b.n	8000902 <HAL_ADC_ConvHalfCpltCallback+0x92>
+ 80008ec:	bf00      	nop
+ 80008ee:	e002      	b.n	80008f6 <HAL_ADC_ConvHalfCpltCallback+0x86>
 			break;
- 80008fc:	bf00      	nop
- 80008fe:	e000      	b.n	8000902 <HAL_ADC_ConvHalfCpltCallback+0x92>
+ 80008f0:	bf00      	nop
+ 80008f2:	e000      	b.n	80008f6 <HAL_ADC_ConvHalfCpltCallback+0x86>
 			break;
- 8000900:	bf00      	nop
+ 80008f4:	bf00      	nop
 	}
 	// TEST CODE FOR AAC
 
 	PDP_StatusTypeDef AAG = PDP_AppsAgreement(adcBufferChannel.adcAPPS1, adcBufferChannel.adcBPS);
- 8000902:	4b13      	ldr	r3, [pc, #76]	; (8000950 <HAL_ADC_ConvHalfCpltCallback+0xe0>)
- 8000904:	881b      	ldrh	r3, [r3, #0]
- 8000906:	461a      	mov	r2, r3
- 8000908:	4b11      	ldr	r3, [pc, #68]	; (8000950 <HAL_ADC_ConvHalfCpltCallback+0xe0>)
- 800090a:	885b      	ldrh	r3, [r3, #2]
- 800090c:	4619      	mov	r1, r3
- 800090e:	4610      	mov	r0, r2
- 8000910:	f7ff fe14 	bl	800053c <PDP_AppsAgreement>
- 8000914:	4603      	mov	r3, r0
- 8000916:	73fb      	strb	r3, [r7, #15]
+ 80008f6:	4b16      	ldr	r3, [pc, #88]	; (8000950 <HAL_ADC_ConvHalfCpltCallback+0xe0>)
+ 80008f8:	881b      	ldrh	r3, [r3, #0]
+ 80008fa:	461a      	mov	r2, r3
+ 80008fc:	4b14      	ldr	r3, [pc, #80]	; (8000950 <HAL_ADC_ConvHalfCpltCallback+0xe0>)
+ 80008fe:	885b      	ldrh	r3, [r3, #2]
+ 8000900:	4619      	mov	r1, r3
+ 8000902:	4610      	mov	r0, r2
+ 8000904:	f7ff fe1a 	bl	800053c <PDP_AppsAgreement>
+ 8000908:	4603      	mov	r3, r0
+ 800090a:	73fb      	strb	r3, [r7, #15]
 	switch (AAG){
- 8000918:	7bfb      	ldrb	r3, [r7, #15]
- 800091a:	2b00      	cmp	r3, #0
- 800091c:	d002      	beq.n	8000924 <HAL_ADC_ConvHalfCpltCallback+0xb4>
- 800091e:	2b01      	cmp	r3, #1
- 8000920:	d007      	beq.n	8000932 <HAL_ADC_ConvHalfCpltCallback+0xc2>
+ 800090c:	7bfb      	ldrb	r3, [r7, #15]
+ 800090e:	2b00      	cmp	r3, #0
+ 8000910:	d002      	beq.n	8000918 <HAL_ADC_ConvHalfCpltCallback+0xa8>
+ 8000912:	2b01      	cmp	r3, #1
+ 8000914:	d007      	beq.n	8000926 <HAL_ADC_ConvHalfCpltCallback+0xb6>
 			break;
 		case PDP_ERROR:			// TODO add driver notifications and CAN logging for fault cases
 			HAL_GPIO_WritePin(GPIOD, GPIO_PIN_14, GPIO_PIN_SET);
 			break;
 		default:
 			break;
- 8000922:	e00d      	b.n	8000940 <HAL_ADC_ConvHalfCpltCallback+0xd0>
+ 8000916:	e00d      	b.n	8000934 <HAL_ADC_ConvHalfCpltCallback+0xc4>
 			HAL_GPIO_WritePin(GPIOD, GPIO_PIN_14, GPIO_PIN_RESET);
- 8000924:	2200      	movs	r2, #0
- 8000926:	f44f 4180 	mov.w	r1, #16384	; 0x4000
- 800092a:	4807      	ldr	r0, [pc, #28]	; (8000948 <HAL_ADC_ConvHalfCpltCallback+0xd8>)
- 800092c:	f002 f9f2 	bl	8002d14 <HAL_GPIO_WritePin>
+ 8000918:	2200      	movs	r2, #0
+ 800091a:	f44f 4180 	mov.w	r1, #16384	; 0x4000
+ 800091e:	480a      	ldr	r0, [pc, #40]	; (8000948 <HAL_ADC_ConvHalfCpltCallback+0xd8>)
+ 8000920:	f002 f9f8 	bl	8002d14 <HAL_GPIO_WritePin>
 			break;
- 8000930:	e006      	b.n	8000940 <HAL_ADC_ConvHalfCpltCallback+0xd0>
+ 8000924:	e006      	b.n	8000934 <HAL_ADC_ConvHalfCpltCallback+0xc4>
 			HAL_GPIO_WritePin(GPIOD, GPIO_PIN_14, GPIO_PIN_SET);
- 8000932:	2201      	movs	r2, #1
- 8000934:	f44f 4180 	mov.w	r1, #16384	; 0x4000
- 8000938:	4803      	ldr	r0, [pc, #12]	; (8000948 <HAL_ADC_ConvHalfCpltCallback+0xd8>)
- 800093a:	f002 f9eb 	bl	8002d14 <HAL_GPIO_WritePin>
+ 8000926:	2201      	movs	r2, #1
+ 8000928:	f44f 4180 	mov.w	r1, #16384	; 0x4000
+ 800092c:	4806      	ldr	r0, [pc, #24]	; (8000948 <HAL_ADC_ConvHalfCpltCallback+0xd8>)
+ 800092e:	f002 f9f1 	bl	8002d14 <HAL_GPIO_WritePin>
 			break;
- 800093e:	bf00      	nop
+ 8000932:	bf00      	nop
 	}
 
-	// TEST CODE END
+
+	HAL_GPIO_WritePin(GPIOD, GPIO_PIN_12, GPIO_PIN_RESET);	// DEBUG LED TOGGLE FOR TIME PROFILE
+ 8000934:	2200      	movs	r2, #0
+ 8000936:	f44f 5180 	mov.w	r1, #4096	; 0x1000
+ 800093a:	4803      	ldr	r0, [pc, #12]	; (8000948 <HAL_ADC_ConvHalfCpltCallback+0xd8>)
+ 800093c:	f002 f9ea 	bl	8002d14 <HAL_GPIO_WritePin>
 
 	// HAL_GPIO_WritePin(GPIOD, GPIO_PIN_12, GPIO_PIN_SET);	// Flashing this LED lets us monitor the state
 }															// of the buffer using the oscilloscope

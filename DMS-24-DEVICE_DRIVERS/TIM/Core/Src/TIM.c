@@ -10,7 +10,8 @@
 
 extern DAC_HandleTypeDef hdac;
 
-uint16_t adc_buf[ADC_BUFFER_LEN];	 							// Interlaced ADC data
+volatile uint16_t adc_buf[ADC_BUFFER_LEN];	 					// Interlaced ADC data,  the buffer size can be increased to add a delay
+																// in ADC processing, can be useful if the main function is stuck.
 adcBufferChannel_t adcBufferChannel = (adcBufferChannel_t){};	// De-Interlaced ADC Data
 
 
@@ -107,9 +108,8 @@ void HAL_ADC_ConvHalfCpltCallback(ADC_HandleTypeDef* hadc1){
 
 	// Average the first half of the buffer
 	HAL_GPIO_WritePin(GPIOD, GPIO_PIN_12, GPIO_PIN_SET);	// DEBUG LED TOGGLE FOR TIME PROFILE
-	adcBufferChannel.adcAPPS1 =	TIM_DeInterleave(adc_buf, 0, 64); 		// TODO
-	adcBufferChannel.adcBPS 	 =	TIM_DeInterleave(adc_buf, 1, 64); 	// TODO
-	HAL_GPIO_WritePin(GPIOD, GPIO_PIN_12, GPIO_PIN_RESET);	// DEBUG LED TOGGLE FOR TIME PROFILE
+	adcBufferChannel.adcAPPS1	 =	TIM_DeInterleave(adc_buf, 0, 64); 	// The depth can be changed to control how many values we average
+	adcBufferChannel.adcBPS 	 =	TIM_DeInterleave(adc_buf, 1, 64);
 
 	// Plausibility Checks
 	PDP_StatusTypeDef PAG = PDP_PedealAgreement(adcBufferChannel.adcAPPS1, adcBufferChannel.adcBPS);
@@ -139,7 +139,8 @@ void HAL_ADC_ConvHalfCpltCallback(ADC_HandleTypeDef* hadc1){
 			break;
 	}
 
-	// TEST CODE END
+
+	HAL_GPIO_WritePin(GPIOD, GPIO_PIN_12, GPIO_PIN_RESET);	// DEBUG LED TOGGLE FOR TIME PROFILE
 
 	// HAL_GPIO_WritePin(GPIOD, GPIO_PIN_12, GPIO_PIN_SET);	// Flashing this LED lets us monitor the state
 }															// of the buffer using the oscilloscope
