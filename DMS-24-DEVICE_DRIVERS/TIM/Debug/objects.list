@@ -1,3 +1,4 @@
+"./Core/Src/DRIVER_IO.o"
 "./Core/Src/PEDAL_PLAUSIBILITY.o"
 "./Core/Src/TIM.o"
 "./Core/Src/main.o"
