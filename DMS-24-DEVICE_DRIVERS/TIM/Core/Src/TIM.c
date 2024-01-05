@@ -96,7 +96,7 @@ uint16_t TIM_ConvertValueLinearApprox(uint16_t inputValue)
   * @todo Replace with a moving average algorithm, for large buffer sizes, an overflow may occur
   * @return averages first half the the input arrays
   */
-uint16_t TIM_Average(uint16_t adc_buffer[]){
+uint16_t TIM_Average(uint16_t adc_buffer[]){	// TODO FIX THIS ASAP ADC_CHANNEL_BUFFER_LEN / 2
 	uint32_t total = 0;
 	for (int i = 0; i < (ADC_CHANNEL_BUFFER_LEN / 2); i++) {  	// TODO Change buffer since to channel size
 		total += adc_buffer[i];									// TODO Change to moving average
@@ -153,6 +153,7 @@ void TIM_Init(ADC_HandleTypeDef *TIM_hadc1){
   * @retval None
   */
 void HAL_ADC_ConvHalfCpltCallback(ADC_HandleTypeDef* hadc1){
+	HAL_GPIO_WritePin(GPIOD, GPIO_PIN_12, GPIO_PIN_SET);	// DEBUG
 	TIM_DeInterleave(&adcBufferChannel, adc_buf);
 
 	// Average the first half of the buffer
@@ -188,8 +189,8 @@ void HAL_ADC_ConvHalfCpltCallback(ADC_HandleTypeDef* hadc1){
 	}
 
 	// TEST CODE END
-
-	HAL_GPIO_WritePin(GPIOD, GPIO_PIN_12, GPIO_PIN_SET);	// Flashing this LED lets us monitor the state
+	HAL_GPIO_WritePin(GPIOD, GPIO_PIN_12, GPIO_PIN_RESET);	// DEBUG
+	// HAL_GPIO_WritePin(GPIOD, GPIO_PIN_12, GPIO_PIN_SET);	// Flashing this LED lets us monitor the state
 }															// of the buffer using the oscilloscope
 
 
@@ -198,6 +199,6 @@ void HAL_ADC_ConvHalfCpltCallback(ADC_HandleTypeDef* hadc1){
   * @retval None
   */
 void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc1){
-	HAL_GPIO_WritePin(GPIOD, GPIO_PIN_12, GPIO_PIN_RESET);
+	// HAL_GPIO_WritePin(GPIOD, GPIO_PIN_12, GPIO_PIN_RESET);
 }
 
