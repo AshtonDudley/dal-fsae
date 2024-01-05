@@ -30,6 +30,10 @@ typedef struct adcBufferChannel_s {
 	uint16_t adcBPS;
 }adcBufferChannel_t;
 
+typedef struct thottleMap_s {
+	float xarray[11];
+	float yarray[11];
+}thottleMap_t;
 
 
 float TIM_GetScaledThrottle(float inputVal);
@@ -40,7 +44,7 @@ void TIM_Init(ADC_HandleTypeDef *TIM_hadc1);
 
 uint16_t TIM_ConvertValue(uint16_t inputValue);
 
-uint16_t TIM_ConvertValueLinearApprox(uint16_t inputValue);
+uint16_t TIM_ConvertValueLinearApprox(uint16_t inputValue, thottleMap_t *thottleMap);
 
 uint16_t TIM_Average(uint16_t adc_buffer[], uint16_t depth);
 
