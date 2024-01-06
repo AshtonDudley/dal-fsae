@@ -20,40 +20,6 @@ static volatile uint16_t *outBufPtr = &adc_buf[0];				// https://www.youtube.com
 
 adcBufferChannel_t adcBufferChannel = (adcBufferChannel_t){};	// De-Interlaced ADC Data
 
-int entry_state(void);
-int foo_state(void);
-int bar_state(void);
-int exit_state(void);
-
-/* array and enum below must be in sync! */
-int (*state[])(void) = {entry_state, foo_state, bar_state, exit_state};
-enum state_codes { entry, foo, bar, end };
-
-enum ret_codes { ok, fail, repeat };
-struct transition {
-  enum state_codes src_state;
-  enum ret_codes ret_code;
-  enum state_codes dst_state;
-};
-/* transitions from end state aren't needed */
-struct transition state_transitions[] = {
-    {entry, ok, foo}, {entry, fail, end}, {foo, ok, bar},
-    {foo, fail, end}, {foo, repeat, foo}, {bar, ok, end},
-    {bar, fail, end}, {bar, repeat, foo}};
-
-#define EXIT_STATE end
-#define ENTRY_STATE entry
-
-int lookup_transitions(enum state_codes cur_state, enum ret_codes rc);
-
-
-
-int lookup_transitions(enum state_codes cur_state, enum ret_codes rc) {
-
-  return 1;
-}
-
-
 typedef enum {
 	Start_state,
 	Idle_state,

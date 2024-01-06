@@ -109,43 +109,14 @@ int main(void)
   MX_DAC_Init();
   MX_TIM6_Init();
   /* USER CODE BEGIN 2 */
-  HAL_GPIO_WritePin(GPIOD, GPIO_PIN_13, GPIO_PIN_SET);
-  TIM_Init(&hadc1);
-  HAL_GPIO_WritePin(GPIOD, GPIO_PIN_13, GPIO_PIN_SET);
+  AppConfig();
 
-  HAL_DAC_Start(&hdac,DAC1_CHANNEL_1);
-
-  // DAC STUFF
-
-  // END DAC STUFF
-
-
-  //HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_14);
-  /* USER CODE END 2 */
+  AppMain(); // Infinite Loop Begin
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-
-  uint32_t prevTime =0, curTime = 0;
-
-  while (1)
+  while (1)		// We don't use this, instead we use the loop inside AppMain()
   {
-
-	  //int voltage = TIM_ConvertValue(128);
-	  //TIM_OutputDAC(voltage);
-	  curTime = HAL_GetTick();
-
-	  if (curTime - prevTime >= 500){
-		  //HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_15);
-		  prevTime = curTime;
-	  }
-	  extern uint8_t dataReadyFlag;
-	  if(dataReadyFlag == 1){
-		  HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_15);
-		  TIM_ProcessData();
-	  }
-
-
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
