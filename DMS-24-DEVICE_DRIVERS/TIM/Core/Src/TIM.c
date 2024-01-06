@@ -10,7 +10,7 @@
 
 extern DAC_HandleTypeDef hdac;
 
-uint8_t dataReadyFlag = 0;
+bool dataReadyFlag = 0;
 
 uint16_t adc_buf[ADC_BUFFER_LEN];	 							// Interlaced ADC data,  the buffer size can be increased to add a delay in ADC processing, can be useful if the main function is stuck.
 uint16_t dac_buf[ADC_BUFFER_LEN];
@@ -51,8 +51,7 @@ uint16_t TIM_ConvertValueLinearApprox(uint16_t inputValue, thottleMap_t *thottle
 	y0 = thottleMap->yarray[i - 1];
 	y1 = thottleMap->yarray[i];
 
-	uint16_t outputValue =  (y1 + (inputValue - x1) * ((y1 - y0) / (x1 - x0))); 	// Linear Approximation, On a scale of 1-100
-	//outputValue = outputValue / 30.3030f * 4096 / 3.3; 								// Convert Value from 1-100 scale to 1-4096
+	uint16_t outputValue = (y1 + (inputValue - x1) * ((y1 - y0) / (x1 - x0))); // Linear Approximation, On a scale of 1-100
 	return outputValue;
 }
 

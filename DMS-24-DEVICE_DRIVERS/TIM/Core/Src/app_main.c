@@ -82,7 +82,6 @@ void AppMain() {
 			HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_15);
 			prevTime = curTime;
 		}
-
 	    state_fun = state[cur_state];
 	    rc = state_fun();
 
@@ -92,16 +91,73 @@ void AppMain() {
 }
 
 state_codes_t lookup_transitions(state_codes_t cur_state, ret_codes_t rc){
-	return 0;
+	for (int i = 0; i < sizeof(state_transitions) / sizeof(state_transitions[0]); i++) {
+		if (state_transitions[i].src_state == cur_state && state_transitions[i].ret_code == rc) {
+			switch (state_transitions[i].src_state) {
+			case entry:
+				break;
+			case idle:
+				break;
+			case forward:
+				switch (rc) {
+				case adc_data_ready:
+					TIM_ProcessData();
+					break;
+				case ok:
+					break;
+				case fail:
+					break;
+				case change_map:
+					break;
+				case vehicle_stopped:
+					break;
+				default:
+					break;
+				}
+			case reverse:
+				break;
+			default:
+				break;
+
+			}
+
+			return state_transitions[i].dst_state; // Return the next state
+		}
+	}
+	// Return an error code indicating that no matching transition was found
+	return -1;
 }
 
+
+
+
+
+/* These transition functions are called at the start of their corresponding state,
+ * They return a ret_codes_t to decide what to do next
+ */
+
 int entry_state(void){
-	return 0;
+	// TODO
+	// Check if all systems are okay
+	return ok;
 }
 int idle_state(void){
-	return 0;
+	// TODO
+	// Check if car is moving
+	// Check if driver selects forwards -> Set Forward Throttle Map
+	// Check if driver selects reverse 	-> Set Reverse Throttle Map
+	return dir_forward;
 }
 int forward_state(void){
+	// Check CANbus -> CanBUS
+	// Check if car is stopped -> STATE -> Idle, set idle throttle map
+	// Check for driver inputs -> change thottle map
+	// Check if any data is ready -> deinterleve and send motor data
+	extern bool dataReadyFlag;
+	if (dataReadyFlag){
+		return adc_data_ready;
+	}
+	// All okay -> do nothing
 	return 0;
 }
 int reverse_state(void){
