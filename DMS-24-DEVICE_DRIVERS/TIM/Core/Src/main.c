@@ -23,6 +23,7 @@
 /* USER CODE BEGIN Includes */
 #include "TIM.h"
 #include "DRIVER_IO.h"
+#include "app_main.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
