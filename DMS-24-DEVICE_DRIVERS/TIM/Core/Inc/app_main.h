@@ -8,7 +8,7 @@
 #ifndef INC_APP_MAIN_H_
 #define INC_APP_MAIN_H_
 
-<<<<<<< HEAD
+
 /* state machine */
 
 typedef enum {
@@ -24,32 +24,24 @@ typedef enum {
 
 /* int (*state[])(void) and enum below must be in sync! */
 typedef enum { entry, idle, forward, reverse, end }state_codes_t;
-=======
-
->>>>>>> parent of b00526e (setup structure and function prototypes for state machine)
 
 
 void AppConfig();
 void AppMain();
 
-<<<<<<< HEAD
 state_codes_t lookup_transitions(state_codes_t cur_state, ret_codes_t rc);
 
 
 
 
 /* called when entering state */
-int entry_state(void);		// car is initialized
-int idle_state(void);		// car is not moving
+int entry_state(void);
+int idle_state(void);
 int forward_state(void);
 int reverse_state(void);
-int end_state(void);		// shutdown sequence
+int end_state(void);
 
 
 
 
-
-
-=======
->>>>>>> parent of b00526e (setup structure and function prototypes for state machine)
 #endif /* INC_APP_MAIN_H_ */

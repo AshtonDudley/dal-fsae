@@ -1,8 +1,8 @@
-<<<<<<< HEAD
-../Core/Src/app_main.c:59:6:AppConfig	1
-../Core/Src/app_main.c:69:6:AppMain	3
-../Core/Src/app_main.c:92:15:lookup_transitions	1
-=======
-../Core/Src/app_main.c:23:6:AppConfig	1
-../Core/Src/app_main.c:33:6:AppMain	3
->>>>>>> parent of b00526e (setup structure and function prototypes for state machine)
+../Core/Src/app_main.c:61:6:AppConfig	1
+../Core/Src/app_main.c:68:6:AppMain	2
+../Core/Src/app_main.c:94:15:lookup_transitions	1
+../Core/Src/app_main.c:98:5:entry_state	1
+../Core/Src/app_main.c:101:5:idle_state	1
+../Core/Src/app_main.c:104:5:forward_state	1
+../Core/Src/app_main.c:107:5:reverse_state	1
+../Core/Src/app_main.c:110:5:end_state	1
