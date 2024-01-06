@@ -110,8 +110,8 @@ int main(void)
   MX_TIM6_Init();
   /* USER CODE BEGIN 2 */
   AppConfig();
-
-  AppMain(); // Infinite Loop Begin
+  AppMain();
+  /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */

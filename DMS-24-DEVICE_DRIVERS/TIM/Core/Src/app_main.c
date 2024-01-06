@@ -63,9 +63,14 @@ void AppConfig() {
 
 }
 
+#define END end
+#define ENTRY entry
+
 void AppMain() {
 
 	uint32_t prevTime = 0, curTime = 0;
+
+
 
 	while (1) {
 		//int voltage = TIM_ConvertValue(128);

@@ -8,7 +8,6 @@
 #ifndef INC_APP_MAIN_H_
 #define INC_APP_MAIN_H_
 
-
 /* state machine */
 
 typedef enum {
@@ -40,6 +39,8 @@ int idle_state(void);		// car is not moving
 int forward_state(void);
 int reverse_state(void);
 int end_state(void);		// shutdown sequence
+
+
 
 
 
