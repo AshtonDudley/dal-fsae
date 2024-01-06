@@ -31,23 +31,23 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY
  13 .comment      00000043  00000000  00000000  00020098  2**0
                   CONTENTS, READONLY
- 14 .debug_info   0000d8aa  00000000  00000000  000200db  2**0
+ 14 .debug_info   0000d9d0  00000000  00000000  000200db  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 15 .debug_abbrev 000023f4  00000000  00000000  0002d985  2**0
+ 15 .debug_abbrev 00002461  00000000  00000000  0002daab  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 16 .debug_aranges 00000db8  00000000  00000000  0002fd80  2**3
+ 16 .debug_aranges 00000dc0  00000000  00000000  0002ff10  2**3
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 17 .debug_rnglists 00000a87  00000000  00000000  00030b38  2**0
+ 17 .debug_rnglists 00000a8d  00000000  00000000  00030cd0  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 18 .debug_macro  00023001  00000000  00000000  000315bf  2**0
+ 18 .debug_macro  0002300d  00000000  00000000  0003175d  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 19 .debug_line   00010919  00000000  00000000  000545c0  2**0
+ 19 .debug_line   00010932  00000000  00000000  0005476a  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 20 .debug_str    000d9038  00000000  00000000  00064ed9  2**0
+ 20 .debug_str    000d90fd  00000000  00000000  0006509c  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 21 .debug_frame  00003948  00000000  00000000  0013df14  2**2
+ 21 .debug_frame  00003970  00000000  00000000  0013e19c  2**2
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 22 .debug_line_str 00000059  00000000  00000000  0014185c  2**0
+ 22 .debug_line_str 00000059  00000000  00000000  00141b0c  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
 
 Disassembly of section .text:
@@ -885,7 +885,7 @@ void TIM_ProcessData(){
  800087e:	461a      	mov	r2, r3
  8000880:	4b2d      	ldr	r3, [pc, #180]	; (8000938 <TIM_ProcessData+0xd8>)
  8000882:	801a      	strh	r2, [r3, #0]
-	adcBufferChannel.adcBPS    =	TIM_DeInterleave(adc_buf, 1, 64);
+	adcBufferChannel.adcBPS    =	TIM_DeInterleave(adc_buf, 1, 64);	// TODO Change to a smaller buffer (128) which samples slower
  8000884:	2240      	movs	r2, #64	; 0x40
  8000886:	2101      	movs	r1, #1
  8000888:	482a      	ldr	r0, [pc, #168]	; (8000934 <TIM_ProcessData+0xd4>)
