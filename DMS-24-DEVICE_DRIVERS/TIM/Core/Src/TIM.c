@@ -3,16 +3,24 @@
  *
  *  Created on: Dec 27, 2023
  *      Author: Ashton Dudley
- */
+	 */
 
 
 #include "TIM.h"
 
 extern DAC_HandleTypeDef hdac;
 
-uint16_t adc_buf[ADC_BUFFER_LEN];	 							// Interlaced ADC data,  the buffer size can be increased to add a delay
-																// in ADC processing, can be useful if the main function is stuck.
+uint8_t dataReadyFlag = 0;
+
+uint16_t adc_buf[ADC_BUFFER_LEN];	 							// Interlaced ADC data,  the buffer size can be increased to add a delay in ADC processing, can be useful if the main function is stuck.
+uint16_t dac_buf[ADC_BUFFER_LEN];
+
+static volatile uint16_t *inBufPtr;								// TODO These are currently unused
+static volatile uint16_t *outBufPtr = &adc_buf[0];				// https://www.youtube.com/watch?v=zlGSxZGwj-E for how to use them
+
 adcBufferChannel_t adcBufferChannel = (adcBufferChannel_t){};	// De-Interlaced ADC Data
+
+
 
 
 thottleMap_t currentThottleMap = (thottleMap_t) {
@@ -103,13 +111,11 @@ void TIM_Init(ADC_HandleTypeDef *TIM_hadc1){
   * @brief  This function is executed when half the TIM buffer is full
   * @retval None
   */
-void HAL_ADC_ConvHalfCpltCallback(ADC_HandleTypeDef* hadc1){
-	//TIM_DeInterleave(&adcBufferChannel, adc_buf);
 
-	// Average the first half of the buffer
+void TIM_ProcessData(){
 	HAL_GPIO_WritePin(GPIOD, GPIO_PIN_12, GPIO_PIN_SET);	// DEBUG LED TOGGLE FOR TIME PROFILE
 	adcBufferChannel.adcAPPS1  =	TIM_DeInterleave(adc_buf, 0, 64); 	// The depth can be changed to control how many values we average
-	adcBufferChannel.adcBPS    =	TIM_DeInterleave(adc_buf, 1, 64);
+	adcBufferChannel.adcBPS    =	TIM_DeInterleave(adc_buf, 1, 64);	// TODO Change to a smaller buffer (128) which samples slower
 
 	// Plausibility Checks
 	PDP_StatusTypeDef PAG = PDP_PedealAgreement(adcBufferChannel.adcAPPS1, adcBufferChannel.adcBPS);
@@ -144,8 +150,18 @@ void HAL_ADC_ConvHalfCpltCallback(ADC_HandleTypeDef* hadc1){
 
 	// END TEST CODE FOR AAC
 
-
+	dataReadyFlag = 0;
 	HAL_GPIO_WritePin(GPIOD, GPIO_PIN_12, GPIO_PIN_RESET);	// DEBUG LED TOGGLE FOR TIME PROFILE
+}
+
+void HAL_ADC_ConvHalfCpltCallback(ADC_HandleTypeDef* hadc1){
+	inBufPtr  = &adc_buf[0];
+	outBufPtr = &dac_buf[0];
+	dataReadyFlag = 1;
+	//TIM_DeInterleave(&adcBufferChannel, adc_buf);
+
+	// Average the first half of the buffer
+
 
 	// HAL_GPIO_WritePin(GPIOD, GPIO_PIN_12, GPIO_PIN_SET);	// Flashing this LED lets us monitor the state
 }															// of the buffer using the oscilloscope
@@ -156,6 +172,9 @@ void HAL_ADC_ConvHalfCpltCallback(ADC_HandleTypeDef* hadc1){
   * @retval None
   */
 void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc1){
+	inBufPtr  = &adc_buf[ADC_BUFFER_LEN / 2];
+	outBufPtr = &dac_buf[ADC_BUFFER_LEN / 2];
+	dataReadyFlag = 1;
 	// HAL_GPIO_WritePin(GPIOD, GPIO_PIN_12, GPIO_PIN_RESET);
 }
 

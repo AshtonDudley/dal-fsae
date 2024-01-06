@@ -124,13 +124,26 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+
+  uint32_t prevTime =0, curTime = 0;
+
   while (1)
   {
 
 	  //int voltage = TIM_ConvertValue(128);
 	  //TIM_OutputDAC(voltage);
-	  HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_15);
-	  HAL_Delay(500);
+	  curTime = HAL_GetTick();
+
+	  if (curTime - prevTime >= 500){
+		  //HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_15);
+		  prevTime = curTime;
+	  }
+	  extern uint8_t dataReadyFlag;
+	  if(dataReadyFlag == 1){
+		  HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_15);
+		  TIM_ProcessData();
+	  }
+
 
     /* USER CODE END WHILE */
 

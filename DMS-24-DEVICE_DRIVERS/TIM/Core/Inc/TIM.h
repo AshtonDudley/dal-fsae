@@ -52,4 +52,6 @@ uint16_t TIM_DeInterleave(uint16_t unsortedBuf[], uint16_t startPoint, uint16_t 
 
 void TIM_OutputDAC(uint16_t DAC_Output);
 
+void TIM_ProcessData();
+
 #endif /* SRC_TIM_H_ */
