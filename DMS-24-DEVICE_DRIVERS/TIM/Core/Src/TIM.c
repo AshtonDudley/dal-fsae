@@ -7,6 +7,7 @@
 
 
 #include "TIM.h"
+#include <string.h>
 
 extern DAC_HandleTypeDef hdac;
 
@@ -28,33 +29,70 @@ typedef enum {
 } state_t;
 
 
-thottleMap_t currentThottleMap = (thottleMap_t) {
-	.xarray = {0.0f, 25.6f, 51.2f, 76.8f, 102.4f, 128.0f, 153.6f, 179.2f, 204.8f, 230.4f, 256.0f},			// NOTE: The last value on this array MUST be larger then the largest possible ADC input value
-	.yarray = {0.0f, 102.4f, 307.2f, 512.0f, 819.2f, 1228.8f, 1638.4f, 2048.0f, 2457.6f, 3072.0f, 4096.0f}
-};
+// TODO this, and the counter should be implemented as a hashmap
+float map[11]= {0.0f, 409.6f, 819.2f, 1228.8f, 1638.4f, 2048.0f, 2457.6f, 2867.2f, 3276.8f, 3686.4f, 4096.0f};
 
 /**
  * @brief Throttle Input Module
  * @return Throttle value scaled to desired map
  */
-uint16_t TIM_ConvertValueLinearApprox(uint16_t inputValue, thottleMap_t *thottleMap)
+uint16_t TIM_ConvertValueLinearApprox(uint16_t inputValue, float yarrry[11])
 {
-
+	float xarray[] = {0.0f, 25.6f, 51.2f, 76.8f, 102.4f, 128.0f, 153.6f, 179.2f, 204.8f, 230.4f, 256.0f};
 	float x0 = 0.0f, x1 = 0.0f, y0 = 0.0f, y1 = 0.0f;
 
 	int i = 0;
-	while (thottleMap->xarray[i] < inputValue && i < 11) { // TODO: Improve the safety of this function
+	while (xarray[i] < inputValue && i < 11) { // TODO: Improve the safety of this function
 		i++;
 	}
-	x0 = thottleMap->xarray[i - 1];
-	x1 = thottleMap->xarray[i];
-	y0 = thottleMap->yarray[i - 1];
-	y1 = thottleMap->yarray[i];
+	x0 = xarray[i - 1];
+	x1 = xarray[i];
+	y0 = yarrry[i - 1];
+	y1 = yarrry[i];
 
 	uint16_t outputValue = (y1 + (inputValue - x1) * ((y1 - y0) / (x1 - x0))); // Linear Approximation, On a scale of 1-100
 	return outputValue;
 }
 
+/**
+ * @brief Selects the next thottle map
+ * @retval none
+ */
+void TIM_ChangeThrottleMap(){
+
+	static uint16_t currentMap = 0;
+
+	// TODO this should be made into some datastuct that can be easily loaded
+	// from a file (such as an SD card in the future for quick mapping)
+	float mapA[] = {0.0f, 409.6f, 819.2f, 1228.8f, 1638.4f, 2048.0f, 2457.6f, 2867.2f, 3276.8f, 3686.4f, 4096.0f};
+	float mapB[] = {1228.8f, 1515.52f, 1802.24f, 2088.96f, 2375.68f, 2662.4f, 2949.12f, 3235.84f, 3522.56f, 3809.28f, 4096.0f};
+	float mapC[] = {614.4f, 819.2f, 1024.0f, 1228.8f, 1638.4f, 2048.0f, 2457.6f, 2867.2f, 3276.8f, 3686.4f, 4096.0f};
+	float mapD[] = {0.0f, 	102.4f, 307.2f, 512.0f, 819.2f, 1228.8f, 1638.4f, 2048.0f, 2457.6f, 3072.0f, 4096.0f};
+
+	if (currentMap != 3) {
+		currentMap++;
+	} else {
+		currentMap = 0;
+	}
+
+	// TODO this could be a hashmap, or similar, so that it is easier to expand
+	switch (currentMap){
+	case 0:
+		memcpy(map, mapA, sizeof(mapA));
+		break;
+	case 1:
+		memcpy(map, mapB, sizeof(mapB));
+		break;
+	case 2:
+		memcpy(map, mapC, sizeof(mapC));
+		break;
+	case 3:
+		memcpy(map, mapD, sizeof(mapD));
+		break;
+	default:
+		break;
+	}
+}
 
 
 /**
@@ -65,10 +103,10 @@ uint16_t TIM_ConvertValueLinearApprox(uint16_t inputValue, thottleMap_t *thottle
   * @todo Replace with a moving average algorithm, for large buffer sizes, an overflow may occur
   * @return averages first half the the input arrays
   */
-uint16_t TIM_Average(uint16_t adc_buffer[], uint16_t depth){	// TODO FIX THIS ASAP ADC_CHANNEL_BUFFER_LEN / 2
+uint16_t TIM_Average(uint16_t adc_buffer[], uint16_t depth){
 	uint32_t total = 0;
 	for (int i = 0; i < (depth / 2); i++) {  	// TODO Change buffer since to channel size
-		total += adc_buffer[i];									// TODO Change to moving average
+		total += adc_buffer[i];					// TODO Change to moving average
 	}
 	uint16_t avg = total / (depth / 2);
 	return avg;
@@ -125,7 +163,7 @@ void TIM_ProcessData(){
 	PDP_StatusTypeDef PAG = PDP_PedealAgreement(adcBufferChannel.adcAPPS1, adcBufferChannel.adcBPS);
 	switch (PAG){
 		case PDP_OKAY:
-			uint32_t motorControllerOutputVoltage = TIM_ConvertValueLinearApprox(adcBufferChannel.adcAPPS1, &currentThottleMap);
+			uint32_t motorControllerOutputVoltage = TIM_ConvertValueLinearApprox(adcBufferChannel.adcAPPS1, map);
 			TIM_OutputDAC(motorControllerOutputVoltage);
 			break;
 		case PDP_ERROR:			// TODO add driver notifications and CAN logging for fault cases
@@ -158,6 +196,10 @@ void TIM_ProcessData(){
 	HAL_GPIO_WritePin(GPIOD, GPIO_PIN_12, GPIO_PIN_RESET);	// DEBUG LED TOGGLE FOR TIME PROFILE
 }
 
+
+
+
+
 void HAL_ADC_ConvHalfCpltCallback(ADC_HandleTypeDef* hadc1){
 	inBufPtr  = &adc_buf[0];
 	outBufPtr = &dac_buf[0];
@@ -169,7 +211,6 @@ void HAL_ADC_ConvHalfCpltCallback(ADC_HandleTypeDef* hadc1){
 
 	// HAL_GPIO_WritePin(GPIOD, GPIO_PIN_12, GPIO_PIN_SET);	// Flashing this LED lets us monitor the state
 }															// of the buffer using the oscilloscope
-
 
 /**
   * @brief  This function is executed when  TIM buffer is completely full

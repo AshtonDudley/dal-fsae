@@ -31,8 +31,9 @@ typedef struct adcBufferChannel_s {
 }adcBufferChannel_t;
 
 typedef struct thottleMap_s {
-	float xarray[11];
+	//float xarray[11]; // currently unused
 	float yarray[11];
+	uint16_t pos;
 }thottleMap_t;
 
 
@@ -44,7 +45,9 @@ void TIM_Init(ADC_HandleTypeDef *TIM_hadc1);
 
 uint16_t TIM_ConvertValue(uint16_t inputValue);
 
-uint16_t TIM_ConvertValueLinearApprox(uint16_t inputValue, thottleMap_t *thottleMap);
+uint16_t TIM_ConvertValueLinearApprox(uint16_t inputValue, float yarrry[11]);
+
+void TIM_ChangeThrottleMap();
 
 uint16_t TIM_Average(uint16_t adc_buffer[], uint16_t depth);
 
