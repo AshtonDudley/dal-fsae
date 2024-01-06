@@ -69,7 +69,7 @@ void TIM_ChangeThrottleMap(){
 	float mapC[] = {614.4f, 819.2f, 1024.0f, 1228.8f, 1638.4f, 2048.0f, 2457.6f, 2867.2f, 3276.8f, 3686.4f, 4096.0f};
 	float mapD[] = {0.0f, 	102.4f, 307.2f, 512.0f, 819.2f, 1228.8f, 1638.4f, 2048.0f, 2457.6f, 3072.0f, 4096.0f};
 
-	if (currentMap != 3) {
+	if (currentMap < 4) {
 		currentMap++;
 	} else {
 		currentMap = 0;
