@@ -1424,7 +1424,7 @@ state_codes_t lookup_transitions(state_codes_t cur_state, ret_codes_t rc){
  8000c1c:	f7ff fec6 	bl	80009ac <TIM_ProcessData>
 					break;
  8000c20:	e000      	b.n	8000c24 <lookup_transitions+0x9c>
-				case change_map:
+					// Currently handled by interupt
 					break;
 				case vehicle_stopped:
 					break;

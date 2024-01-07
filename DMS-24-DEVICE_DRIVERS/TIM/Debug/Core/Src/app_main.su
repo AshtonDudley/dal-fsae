@@ -1,8 +1,8 @@
 ../Core/Src/app_main.c:61:6:AppConfig	8	static
 ../Core/Src/app_main.c:68:6:AppMain	32	static
 ../Core/Src/app_main.c:93:15:lookup_transitions	24	static
-../Core/Src/app_main.c:139:5:entry_state	4	static
-../Core/Src/app_main.c:144:5:idle_state	4	static
-../Core/Src/app_main.c:151:5:forward_state	4	static
-../Core/Src/app_main.c:163:5:reverse_state	4	static
-../Core/Src/app_main.c:166:5:end_state	4	static
+../Core/Src/app_main.c:140:5:entry_state	4	static
+../Core/Src/app_main.c:145:5:idle_state	4	static
+../Core/Src/app_main.c:152:5:forward_state	4	static
+../Core/Src/app_main.c:164:5:reverse_state	4	static
+../Core/Src/app_main.c:167:5:end_state	4	static

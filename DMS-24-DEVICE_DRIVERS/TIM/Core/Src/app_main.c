@@ -108,6 +108,7 @@ state_codes_t lookup_transitions(state_codes_t cur_state, ret_codes_t rc){
 				case fail:
 					break;
 				case change_map:
+					// Currently handled by interupt
 					break;
 				case vehicle_stopped:
 					break;
