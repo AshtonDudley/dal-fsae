@@ -23,7 +23,11 @@
 extern DAC_HandleTypeDef hdac;
 extern ADC_HandleTypeDef hadc1;
 
-
+/* External Flags */
+extern _Bool dataReadyFlag;
+extern _Bool changeThrottleMapFlag;
+extern _Bool forwardDirFlag;
+extern _Bool reverseDirFlag;
 
 
 /* This fucntion MUST be synced with the state_codes_t enum,
@@ -92,7 +96,10 @@ void AppMain() {
 
 state_codes_t lookup_transitions(state_codes_t cur_state, ret_codes_t rc){
 	for (int i = 0; i < sizeof(state_transitions) / sizeof(state_transitions[0]); i++) {
+
 		if (state_transitions[i].src_state == cur_state && state_transitions[i].ret_code == rc) {
+
+
 			switch (state_transitions[i].src_state) {
 			case entry:
 				break;
@@ -108,7 +115,7 @@ state_codes_t lookup_transitions(state_codes_t cur_state, ret_codes_t rc){
 				case fail:
 					break;
 				case change_map:
-					// Currently handled by interupt
+					TIM_ChangeThrottleMap();
 					break;
 				case vehicle_stopped:
 					break;
@@ -154,12 +161,16 @@ int forward_state(void){
 	// Check if car is stopped -> STATE -> Idle, set idle throttle map
 	// Check for driver inputs -> change thottle map
 	// Check if any data is ready -> deinterleve and send motor data
-	extern bool dataReadyFlag;
-	if (dataReadyFlag){
+	if (changeThrottleMapFlag){
+		return change_map;
+	}
+	else if (dataReadyFlag){
 		return adc_data_ready;
 	}
 	// All okay -> do nothing
-	return 0;
+	else {
+		return 0;
+	}
 }
 int reverse_state(void){
 	return 0;

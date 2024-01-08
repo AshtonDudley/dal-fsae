@@ -9,8 +9,8 @@
 #define SRC_TIM_H_
 
 /*	INCLUDES	*/
+#include <stdbool.h>
 #include "stm32f4xx_hal.h"
-#include "stdbool.h"
 #include "PEDAL_PLAUSIBILITY.h"
 
 
