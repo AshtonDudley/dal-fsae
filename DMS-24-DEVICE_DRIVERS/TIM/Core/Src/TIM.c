@@ -21,12 +21,6 @@ static volatile uint16_t *outBufPtr = &adc_buf[0];				// https://www.youtube.com
 
 adcBufferChannel_t adcBufferChannel = (adcBufferChannel_t){};	// De-Interlaced ADC Data
 
-typedef enum {
-	Start_state,
-	Idle_state,
-	Forward_drive_state,
-	Reverse_drive_state
-} state_t;
 
 
 // TODO this, and the counter should be implemented as a hashmap
@@ -157,10 +151,10 @@ void TIM_Init(ADC_HandleTypeDef *TIM_hadc1){
 void TIM_ProcessData(){
 	HAL_GPIO_WritePin(GPIOD, GPIO_PIN_12, GPIO_PIN_SET);	// DEBUG LED TOGGLE FOR TIME PROFILE
 	adcBufferChannel.adcAPPS1 = TIM_DeInterleave(adc_buf, 0, 64); 	// The depth can be changed to control how many values we average
-	adcBufferChannel.adcBPS   =	TIM_DeInterleave(adc_buf, 1, 64);	// TODO Change to a smaller buffer (128) which samples slower
+	adcBufferChannel.adcFBPS   =	TIM_DeInterleave(adc_buf, 1, 64);	// TODO Change to a smaller buffer (128) which samples slower
 
 	// Plausibility Checks
-	PDP_StatusTypeDef PAG = PDP_PedealAgreement(adcBufferChannel.adcAPPS1, adcBufferChannel.adcBPS);
+	PDP_StatusTypeDef PAG = TIM_SignalPlausibility();
 	switch (PAG){
 		case PDP_OKAY:
 			uint32_t motorControllerOutputVoltage = TIM_ConvertValueLinearApprox(adcBufferChannel.adcAPPS1, map);
@@ -187,20 +181,28 @@ void TIM_ProcessData(){
 }
 
 
-PDP_StatusTypeDef TIM_AppsAgreement(){
-	PDP_StatusTypeDef AAG = PDP_AppsAgreement(adcBufferChannel.adcAPPS1, adcBufferChannel.adcBPS);
-	return AAG;
-}
 
 PDP_StatusTypeDef TIM_SignalPlausibility() {
+	PDP_StatusTypeDef AAC = PDP_AppsAgreement(adcBufferChannel.adcAPPS1,
+			adcBufferChannel.adcAPPS2);
+
+	PDP_StatusTypeDef PAG = PDP_PedealAgreement(adcBufferChannel.adcAPPS1,
+			adcBufferChannel.adcFBPS);
+
+	PDP_StatusTypeDef SPA = PDP_ERROR;
 	if (PDP_ThresholdCheck(adcBufferChannel.adcAPPS1) == PDP_OKAY
-			&& PDP_ThresholdCheck(adcBufferChannel.adcBPS) == PDP_OKAY) {
+			&& PDP_ThresholdCheck(adcBufferChannel.adcAPPS2) == PDP_OKAY
+			&& PDP_ThresholdCheck(adcBufferChannel.adcFBPS) == PDP_OKAY
+			&& PDP_ThresholdCheck(adcBufferChannel.adcRBPS) == PDP_OKAY) {
+		SPA = PDP_OKAY;
+	}
+
+	if (AAC == PDP_OKAY && PAG == PDP_OKAY && SPA == PDP_OKAY){
 		return PDP_OKAY;
 	}
 	else {
 		return PDP_ERROR;
 	}
-
 }
 
 

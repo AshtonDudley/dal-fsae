@@ -121,12 +121,15 @@ state_codes_t lookup_transitions(state_codes_t cur_state, ret_codes_t rc){
 				case ok:
 					break;
 				case fail:
+					TIM_OutputDAC(CUT_MOTOR_SIGNAL);
 					break;
 				case change_map:
 					TIM_ChangeThrottleMap();
 					changeThrottleMapFlag = 0;
 					break;
 				case vehicle_stopped:
+					forwardDirFlag = 0;
+					TIM_OutputDAC(CUT_MOTOR_SIGNAL);
 					break;
 				default:
 					break;
@@ -155,7 +158,7 @@ state_codes_t lookup_transitions(state_codes_t cur_state, ret_codes_t rc){
  * They return a ret_codes_t to decide what to do next
  */
 
-int entry_state(void){
+int entry_state(void) {
 	// TODO
 	// Check if all systems are okay
 #ifdef DEBUG
@@ -169,7 +172,8 @@ int entry_state(void){
 	}
 #endif
 }
-int idle_state(void){
+
+int idle_state(void) {
 #ifdef DEBUG
 	return dir_forward;
 #else
@@ -188,15 +192,16 @@ int idle_state(void){
 	// Check if driver selects reverse 	-> Set Reverse Throttle Map
 #endif
 }
-int forward_state(void){
+
+int forward_state(void) {
 	// Check CANbus -> CanBUS
 	// Check if car is stopped -> STATE -> Idle, set idle throttle map
 	// Check if any data is ready -> deinterleve and send motor data
-	if (dataReadyFlag){
+	if (dataReadyFlag) {
 		return adc_data_ready;
 	}
 	// Check for driver inputs -> change thottle map
-	else if (changeThrottleMapFlag){
+	else if (changeThrottleMapFlag) {
 		return change_map;
 	}
 	// All okay -> wait and do nothing
@@ -204,15 +209,14 @@ int forward_state(void){
 		return repeat;
 	}
 }
-int reverse_state(void){
-	if (dataReadyFlag){
+
+int reverse_state(void) {
+	if (dataReadyFlag) {
 		return adc_data_ready;
 	}
 	return 0;
 }
-int end_state(void){
+int end_state(void) {
 	return 0;
 }
-
-
 

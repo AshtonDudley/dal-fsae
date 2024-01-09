@@ -27,7 +27,9 @@
 
 typedef struct adcBufferChannel_s {
 	uint16_t adcAPPS1;
-	uint16_t adcBPS;
+	uint16_t adcAPPS2;
+	uint16_t adcFBPS;
+	uint16_t adcRBPS;
 }adcBufferChannel_t;
 
 typedef struct thottleMap_s {
@@ -55,8 +57,9 @@ uint16_t TIM_DeInterleave(uint16_t unsortedBuf[], uint16_t startPoint, uint16_t 
 
 void TIM_OutputDAC(uint16_t DAC_Output);
 
+PDP_StatusTypeDef TIM_SignalPlausibility();
+
 void TIM_ProcessData();
 
-PDP_StatusTypeDef TIM_AppsAgreement();
 
 #endif /* SRC_TIM_H_ */
