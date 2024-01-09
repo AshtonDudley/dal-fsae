@@ -192,6 +192,16 @@ PDP_StatusTypeDef TIM_AppsAgreement(){
 	return AAG;
 }
 
+PDP_StatusTypeDef TIM_SignalPlausibility() {
+	if (PDP_ThresholdCheck(adcBufferChannel.adcAPPS1) == PDP_OKAY
+			&& PDP_ThresholdCheck(adcBufferChannel.adcBPS) == PDP_OKAY) {
+		return PDP_OKAY;
+	}
+	else {
+		return PDP_ERROR;
+	}
+
+}
 
 
 

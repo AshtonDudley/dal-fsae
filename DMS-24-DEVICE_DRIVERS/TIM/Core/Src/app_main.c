@@ -8,6 +8,8 @@
  *
  */
 
+#define DEBUG
+
 #include "app_main.h"
 #include "stm32f4xx_hal.h"
 #include "TIM.h"
@@ -156,14 +158,21 @@ state_codes_t lookup_transitions(state_codes_t cur_state, ret_codes_t rc){
 int entry_state(void){
 	// TODO
 	// Check if all systems are okay
-	if (TIM_AppsAgreement() == PDP_OKAY){
+#ifdef DEBUG
+	return ok;
+#else
+	if (TIM_AppsAgreement() == PDP_OKAY && TIM_SignalPlausibility() == PDP_OKAY){
 		return ok;
 	}
 	else {
 		return fail;
 	}
+#endif
 }
 int idle_state(void){
+#ifdef DEBUG
+	return dir_forward;
+#else
 	// TODO
 	// Check if car is moving -> return fail
 	// Check if driver selects forwards -> Set Forward Throttle Map
@@ -177,6 +186,7 @@ int idle_state(void){
 		return repeat;
 	}
 	// Check if driver selects reverse 	-> Set Reverse Throttle Map
+#endif
 }
 int forward_state(void){
 	// Check CANbus -> CanBUS
