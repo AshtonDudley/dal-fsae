@@ -39,7 +39,7 @@ PDP_StatusTypeDef PDP_PedealAgreement(uint32_t apps, uint32_t fbps){ 		// PAG_fa
 }
 
 
-// TODO APPS AGREEMENT FAULT LOGIC
+
 /**
   * @brief  APPS Agreement Check. Checks if both APPS sensors are within
   * %error threshold of each other.
@@ -62,7 +62,9 @@ PDP_StatusTypeDef PDP_AppsAgreement (uint32_t apps1, uint32_t apps2){
 
 }
 // TODO SIGNAL PLAUSIBILITY FAULT LOGIC
+PDP_StatusTypeDef PDP_ThresholdCheck (uint32_t sensor){
 
+}
 
 
 

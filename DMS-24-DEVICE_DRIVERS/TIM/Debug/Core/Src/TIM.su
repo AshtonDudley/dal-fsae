@@ -4,6 +4,7 @@
 ../Core/Src/TIM.c:121:10:TIM_DeInterleave	4120	static
 ../Core/Src/TIM.c:138:6:TIM_OutputDAC	16	static
 ../Core/Src/TIM.c:148:6:TIM_Init	16	static
-../Core/Src/TIM.c:157:6:TIM_ProcessData	24	static
-../Core/Src/TIM.c:203:6:HAL_ADC_ConvHalfCpltCallback	16	static
-../Core/Src/TIM.c:219:6:HAL_ADC_ConvCpltCallback	16	static
+../Core/Src/TIM.c:157:6:TIM_ProcessData	16	static
+../Core/Src/TIM.c:190:19:TIM_AppsAgreement	16	static
+../Core/Src/TIM.c:198:6:HAL_ADC_ConvHalfCpltCallback	16	static
+../Core/Src/TIM.c:214:6:HAL_ADC_ConvCpltCallback	16	static

@@ -1,8 +1,8 @@
-../Core/Src/app_main.c:65:6:AppConfig	1
-../Core/Src/app_main.c:72:6:AppMain	2
-../Core/Src/app_main.c:97:15:lookup_transitions	7
-../Core/Src/app_main.c:147:5:entry_state	1
-../Core/Src/app_main.c:152:5:idle_state	1
-../Core/Src/app_main.c:159:5:forward_state	3
-../Core/Src/app_main.c:175:5:reverse_state	1
-../Core/Src/app_main.c:178:5:end_state	1
+../Core/Src/app_main.c:67:6:AppConfig	1
+../Core/Src/app_main.c:74:6:AppMain	2
+../Core/Src/app_main.c:99:15:lookup_transitions	7
+../Core/Src/app_main.c:156:5:entry_state	2
+../Core/Src/app_main.c:166:5:idle_state	3
+../Core/Src/app_main.c:181:5:forward_state	3
+../Core/Src/app_main.c:197:5:reverse_state	2
+../Core/Src/app_main.c:203:5:end_state	1

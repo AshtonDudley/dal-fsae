@@ -178,17 +178,7 @@ void TIM_ProcessData(){
 	}
 	// TEST CODE FOR AAC
 
-	PDP_StatusTypeDef AAG = PDP_AppsAgreement(adcBufferChannel.adcAPPS1, adcBufferChannel.adcBPS);
-	switch (AAG){
-		case PDP_OKAY:
-			// HAL_GPIO_WritePin(GPIOD, GPIO_PIN_14, GPIO_PIN_RESET);
-			break;
-		case PDP_ERROR:			// TODO add driver notifications and CAN logging for fault cases
-			// HAL_GPIO_WritePin(GPIOD, GPIO_PIN_14, GPIO_PIN_SET);
-			break;
-		default:
-			break;
-	}
+
 
 	// END TEST CODE FOR AAC
 
@@ -196,6 +186,11 @@ void TIM_ProcessData(){
 	HAL_GPIO_WritePin(GPIOD, GPIO_PIN_12, GPIO_PIN_RESET);	// DEBUG LED TOGGLE FOR TIME PROFILE
 }
 
+
+PDP_StatusTypeDef TIM_AppsAgreement(){
+	PDP_StatusTypeDef AAG = PDP_AppsAgreement(adcBufferChannel.adcAPPS1, adcBufferChannel.adcBPS);
+	return AAG;
+}
 
 
 

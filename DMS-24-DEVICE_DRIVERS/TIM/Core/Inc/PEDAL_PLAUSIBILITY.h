@@ -33,6 +33,9 @@ typedef enum
 
 #define APPS_AAC_ERROR_THRESHOLD	10		// AAC %error Threshold as whole number (0-100)
 
+#define SPA_MIN_THRESHOLD
+#define SPA_MAX_THRESHOLD
+
 PDP_StatusTypeDef PDP_PedealAgreement(uint32_t apps, uint32_t fbps);
 
 PDP_StatusTypeDef PDP_AppsAgreement (uint32_t apps1, uint32_t apps2);

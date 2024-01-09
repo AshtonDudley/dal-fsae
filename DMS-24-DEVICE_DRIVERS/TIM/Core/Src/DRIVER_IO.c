@@ -12,12 +12,12 @@
 #include "TIM.h"
 
 #define CHANGE_THROTTLE_MAP_PIN GPIO_PIN_0
-#define FORWARD_DIRECTION_PIN GPIO_PIN_1
-#define REVERSE_DIRECTION_PIN GPIO_PIN_2
+#define FORWARD_DIRECTION_PIN GPIO_PIN_8
+#define REVERSE_DIRECTION_PIN GPIO_PIN_9
 
-_Bool changeThrottleMapFlag = 0;
-_Bool forwardDirFlag = 0;
-_Bool reverseDirFlag = 0;
+volatile _Bool changeThrottleMapFlag = 0;
+volatile _Bool forwardDirFlag = 0;
+volatile _Bool reverseDirFlag = 0;
 
 
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
@@ -31,8 +31,6 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 	else if (GPIO_Pin == REVERSE_DIRECTION_PIN){
 		reverseDirFlag = 1;
 	}
-
-
 
 	else {
 		__NOP();

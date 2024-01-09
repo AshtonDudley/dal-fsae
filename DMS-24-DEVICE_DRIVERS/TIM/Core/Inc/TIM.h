@@ -57,4 +57,6 @@ void TIM_OutputDAC(uint16_t DAC_Output);
 
 void TIM_ProcessData();
 
+PDP_StatusTypeDef TIM_AppsAgreement();
+
 #endif /* SRC_TIM_H_ */

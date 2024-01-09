@@ -34,29 +34,31 @@ extern _Bool reverseDirFlag;
  * ie if entry_state = 0 then, entry =0.
  * to add a new state, add to the enum AND the
  */
-int (*state[])(void) = {entry_state, idle_state, forward_state, reverse_state, end_state};
+int (*state[])(
+		void) = {entry_state, idle_state, forward_state, reverse_state, end_state
+};
 
 
 struct transition {
-  state_codes_t src_state;
-  ret_codes_t 	ret_code;
-  state_codes_t dst_state;
+	state_codes_t src_state;
+	ret_codes_t ret_code;
+	state_codes_t dst_state;
 };
 
 struct transition state_transitions[] = {
-  {entry,       ok,                 idle},
-  {entry,       fail,               entry},
-  {idle,        dir_forward,  		forward},
-  {idle,        dir_reverse,  		reverse},
-  {idle,        repeat,             idle},
-  {forward,     ok,                 forward},
-  {forward,     fail,               forward },
-  {forward,     change_map,         forward},
-  {forward,     vehicle_stopped,	idle},
-  {forward,     adc_data_ready,     forward},
-  {reverse,     ok,                 reverse},
-  {reverse,     fail,               forward },
-  {reverse,     vehicle_stopped,    idle},
+	{entry,       ok,                 idle},
+	{entry,       fail,               entry},
+	{idle,        dir_forward,  		forward},
+	{idle,        dir_reverse,  		reverse},
+	{idle,        repeat,             idle},
+	{forward,     repeat,             forward},
+	{forward,     fail,               forward },
+	{forward,     change_map,         forward},
+	{forward,     vehicle_stopped,	idle},
+	{forward,     adc_data_ready,     forward},
+	{reverse,     ok,                 reverse},
+	{reverse,     fail,               forward },
+	{reverse,     vehicle_stopped,    idle},
 };
 
 
@@ -101,14 +103,18 @@ state_codes_t lookup_transitions(state_codes_t cur_state, ret_codes_t rc){
 
 
 			switch (state_transitions[i].src_state) {
+
 			case entry:
 				break;
+
 			case idle:
 				break;
+
 			case forward:
 				switch (rc) {
 				case adc_data_ready:
 					TIM_ProcessData();
+					dataReadyFlag = 0;
 					break;
 				case ok:
 					break;
@@ -116,14 +122,17 @@ state_codes_t lookup_transitions(state_codes_t cur_state, ret_codes_t rc){
 					break;
 				case change_map:
 					TIM_ChangeThrottleMap();
+					changeThrottleMapFlag = 0;
 					break;
 				case vehicle_stopped:
 					break;
 				default:
 					break;
 				}
+
 			case reverse:
 				break;
+
 			default:
 				break;
 
@@ -147,32 +156,48 @@ state_codes_t lookup_transitions(state_codes_t cur_state, ret_codes_t rc){
 int entry_state(void){
 	// TODO
 	// Check if all systems are okay
-	return ok;
+	if (TIM_AppsAgreement() == PDP_OKAY){
+		return ok;
+	}
+	else {
+		return fail;
+	}
 }
 int idle_state(void){
 	// TODO
-	// Check if car is moving
+	// Check if car is moving -> return fail
 	// Check if driver selects forwards -> Set Forward Throttle Map
+	if (forwardDirFlag){
+		return dir_forward;
+	}
+	else if (reverseDirFlag){
+		return dir_reverse;
+	}
+	else {
+		return repeat;
+	}
 	// Check if driver selects reverse 	-> Set Reverse Throttle Map
-	return dir_forward;
 }
 int forward_state(void){
 	// Check CANbus -> CanBUS
 	// Check if car is stopped -> STATE -> Idle, set idle throttle map
-	// Check for driver inputs -> change thottle map
 	// Check if any data is ready -> deinterleve and send motor data
-	if (changeThrottleMapFlag){
-		return change_map;
-	}
-	else if (dataReadyFlag){
+	if (dataReadyFlag){
 		return adc_data_ready;
 	}
-	// All okay -> do nothing
+	// Check for driver inputs -> change thottle map
+	else if (changeThrottleMapFlag){
+		return change_map;
+	}
+	// All okay -> wait and do nothing
 	else {
-		return 0;
+		return repeat;
 	}
 }
 int reverse_state(void){
+	if (dataReadyFlag){
+		return adc_data_ready;
+	}
 	return 0;
 }
 int end_state(void){
