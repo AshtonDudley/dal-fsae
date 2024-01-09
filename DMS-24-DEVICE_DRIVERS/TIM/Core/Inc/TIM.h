@@ -16,8 +16,8 @@
 
 /* 	DEFINES 	*/
 
-#define ADC_BUFFER_LEN 			4096 	// must be a power of two, when divided by the total number of ADC channels//
-#define ADC_CHANNEL_BUFFER_LEN 	2048 	// buffer length per ADC channel, must be divisible into ADC_BUFFER_LEN
+#define ADC_BUFFER_LEN 			128 	// must be a power of two, when divided by the total number of ADC channels//
+#define ADC_CHANNEL_BUFFER_LEN 	64 	// buffer length per ADC channel, must be divisible into ADC_BUFFER_LEN
 
 #define APPS1_BUF_ADDR 			0		// Which array element APPS1 data in the ADC array begins
 #define BPS_BUF_ADDR 			1		// Which array element BPS data in the ADC array begins
@@ -55,7 +55,7 @@ uint16_t TIM_Average(uint16_t adc_buffer[], uint16_t depth);
 
 uint16_t TIM_DeInterleave(uint16_t unsortedBuf[], uint16_t startPoint, uint16_t depth);
 
-void TIM_OutputDAC(uint16_t DAC_Output);
+void TIM_OutputDAC();
 
 PDP_StatusTypeDef TIM_SignalPlausibility();
 

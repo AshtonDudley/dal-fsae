@@ -24,6 +24,8 @@
 
 extern DAC_HandleTypeDef hdac;
 extern ADC_HandleTypeDef hadc1;
+extern TIM_HandleTypeDef htim2;
+
 
 /* External Flags */
 extern _Bool dataReadyFlag;
@@ -53,7 +55,7 @@ struct transition state_transitions[] = {
 	{idle,        dir_forward,  		forward},
 	{idle,        dir_reverse,  		reverse},
 	{idle,        repeat,             idle},
-	{forward,     repeat,             forward},
+	{forward,     ok,             forward},
 	{forward,     fail,               forward },
 	{forward,     change_map,         forward},
 	{forward,     vehicle_stopped,	idle},
@@ -67,8 +69,8 @@ struct transition state_transitions[] = {
 
 
 void AppConfig() {
-
 	TIM_Init(&hadc1);
+	HAL_TIM_Base_Start(&htim2);
 	HAL_DAC_Start(&hdac, DAC1_CHANNEL_1);
 
 }
@@ -119,9 +121,10 @@ state_codes_t lookup_transitions(state_codes_t cur_state, ret_codes_t rc){
 					dataReadyFlag = 0;
 					break;
 				case ok:
+					TIM_OutputDAC();
 					break;
 				case fail:
-					TIM_OutputDAC(CUT_MOTOR_SIGNAL);
+					HAL_DAC_SetValue(&hdac, DAC_CHANNEL_1, DAC_ALIGN_12B_R, CUT_MOTOR_SIGNAL);
 					break;
 				case change_map:
 					TIM_ChangeThrottleMap();
@@ -129,7 +132,7 @@ state_codes_t lookup_transitions(state_codes_t cur_state, ret_codes_t rc){
 					break;
 				case vehicle_stopped:
 					forwardDirFlag = 0;
-					TIM_OutputDAC(CUT_MOTOR_SIGNAL);
+					HAL_DAC_SetValue(&hdac, DAC_CHANNEL_1, DAC_ALIGN_12B_R, CUT_MOTOR_SIGNAL);
 					break;
 				default:
 					break;
@@ -197,8 +200,15 @@ int forward_state(void) {
 	// Check CANbus -> CanBUS
 	// Check if car is stopped -> STATE -> Idle, set idle throttle map
 	// Check if any data is ready -> deinterleve and send motor data
+
+	PDP_StatusTypeDef signalCheck = TIM_SignalPlausibility();
+
+
 	if (dataReadyFlag) {
 		return adc_data_ready;
+	}
+	else if (signalCheck == PDP_ERROR){
+		return fail;
 	}
 	// Check for driver inputs -> change thottle map
 	else if (changeThrottleMapFlag) {
@@ -206,7 +216,7 @@ int forward_state(void) {
 	}
 	// All okay -> wait and do nothing
 	else {
-		return repeat;
+		return ok;
 	}
 }
 

@@ -129,8 +129,10 @@ uint16_t TIM_DeInterleave(uint16_t unsortedBuf[], uint16_t startPoint, uint16_t 
   * Motor Data sheet: https://wiki.neweagle.net/docs/Rinehart/PM100_User_Manual_3_2011.pdf
   * @retval None
   */
-void TIM_OutputDAC(uint16_t DAC_Output){
-	  HAL_DAC_SetValue(&hdac, DAC_CHANNEL_1, DAC_ALIGN_12B_R, DAC_Output);
+void TIM_OutputDAC(){
+
+	uint32_t DAC_Output = TIM_ConvertValueLinearApprox(adcBufferChannel.adcAPPS1, map);
+	HAL_DAC_SetValue(&hdac, DAC_CHANNEL_1, DAC_ALIGN_12B_R, DAC_Output);
 }
 
 
@@ -141,6 +143,7 @@ void TIM_OutputDAC(uint16_t DAC_Output){
   */
 void TIM_Init(ADC_HandleTypeDef *TIM_hadc1){
 	HAL_ADC_Start_DMA(TIM_hadc1, (uint32_t*)adc_buf, ADC_BUFFER_LEN);
+
 }
 
 /**
@@ -151,7 +154,7 @@ void TIM_Init(ADC_HandleTypeDef *TIM_hadc1){
 void TIM_ProcessData(){
 	HAL_GPIO_WritePin(GPIOD, GPIO_PIN_12, GPIO_PIN_SET);	// DEBUG LED TOGGLE FOR TIME PROFILE
 	adcBufferChannel.adcAPPS1 = TIM_DeInterleave(adc_buf, 0, 64); 	// The depth can be changed to control how many values we average
-	adcBufferChannel.adcFBPS   =	TIM_DeInterleave(adc_buf, 1, 64);	// TODO Change to a smaller buffer (128) which samples slower
+	adcBufferChannel.adcFBPS  =	TIM_DeInterleave(adc_buf, 1, 64);	// TODO Change to a smaller buffer (128) which samples slower
 
 	dataReadyFlag = 0;
 	HAL_GPIO_WritePin(GPIOD, GPIO_PIN_12, GPIO_PIN_RESET);	// DEBUG LED TOGGLE FOR TIME PROFILE
@@ -173,6 +176,11 @@ PDP_StatusTypeDef TIM_SignalPlausibility() {
 			&& PDP_ThresholdCheck(adcBufferChannel.adcRBPS) == PDP_OKAY) {
 		SPA = PDP_OKAY;
 	}
+
+	// TODO TEMP DEBUG FOR TESTING
+	AAC = PDP_OKAY;	// DEBUG
+	SPA = PDP_OKAY; // DEBUG
+	// END TEMP DEBUG
 
 	if (AAC == PDP_OKAY && PAG == PDP_OKAY && SPA == PDP_OKAY){
 		return PDP_OKAY;
