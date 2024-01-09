@@ -193,12 +193,11 @@ PDP_StatusTypeDef TIM_SignalPlausibility() {
 
 
 void HAL_ADC_ConvHalfCpltCallback(ADC_HandleTypeDef* hadc1){
-	inBufPtr  = &adc_buf[0];
-	outBufPtr = &dac_buf[0];
-	dataReadyFlag = 1;
-	//TIM_DeInterleave(&adcBufferChannel, adc_buf);
 
-	// Average the first half of the buffer
+	//inBufPtr  = &adc_buf[0];
+	//outBufPtr = &dac_buf[0];
+	//dataReadyFlag = 1;
+
 
 
 	// HAL_GPIO_WritePin(GPIOD, GPIO_PIN_12, GPIO_PIN_SET);	// Flashing this LED lets us monitor the state
