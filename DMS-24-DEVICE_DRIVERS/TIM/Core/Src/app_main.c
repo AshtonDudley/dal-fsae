@@ -50,19 +50,19 @@ struct transition {
 };
 
 struct transition state_transitions[] = {
-	{entry,       ok,                 idle},
-	{entry,       fail,               entry},
-	{idle,        dir_forward,  		forward},
-	{idle,        dir_reverse,  		reverse},
-	{idle,        repeat,             idle},
-	{forward,     ok,             forward},
-	{forward,     fail,               forward },
-	{forward,     change_map,         forward},
+	{entry,       ok,               idle},
+	{entry,       fail,             entry},
+	{idle,        dir_forward,  	forward},
+	{idle,        dir_reverse,  	reverse},
+	{idle,        repeat,           idle},
+	{forward,     ok,            	forward},
+	{forward,     fail,             forward },
+	{forward,     change_map,       forward},
 	{forward,     vehicle_stopped,	idle},
-	{forward,     adc_data_ready,     forward},
-	{reverse,     ok,                 reverse},
-	{reverse,     fail,               forward },
-	{reverse,     vehicle_stopped,    idle},
+	{forward,     adc_data_ready,   forward},
+	{reverse,     ok,               reverse},
+	{reverse,     fail,             forward },
+	{reverse,     vehicle_stopped,  idle},
 };
 
 
