@@ -27,6 +27,7 @@ void TIM_ChangeThrottleMap() {
     memcpy(map, mapsArr[currentMap], sizeof(mapsArr[currentMap]));
 }
 
+// demonstates the change in map
 int main(void) {
     for (int i = 0; i < 12; i++) {
         printf("%.2f ", map[i]);
