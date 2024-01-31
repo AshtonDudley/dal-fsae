@@ -33,8 +33,13 @@ typedef enum
 
 #define APPS_AAC_ERROR_THRESHOLD	10		// AAC %error Threshold as whole number (0-100)
 
+#define SPA_MIN_THRESHOLD			19		// 0.25V (Short to ground threshold)
+#define SPA_MAX_THRESHOLD			255 	// 3.3V  (Short to 3.3V threshold)
+
 PDP_StatusTypeDef PDP_PedealAgreement(uint32_t apps, uint32_t fbps);
 
 PDP_StatusTypeDef PDP_AppsAgreement (uint32_t apps1, uint32_t apps2);
+
+PDP_StatusTypeDef PDP_ThresholdCheck (uint32_t sensor);
 
 #endif /* INC_PEDAL_PLAUSIBILITY_H_ */

@@ -1,5 +1,7 @@
+"./Core/Src/DRIVER_IO.o"
 "./Core/Src/PEDAL_PLAUSIBILITY.o"
 "./Core/Src/TIM.o"
+"./Core/Src/app_main.o"
 "./Core/Src/main.o"
 "./Core/Src/stm32f4xx_hal_msp.o"
 "./Core/Src/stm32f4xx_it.o"

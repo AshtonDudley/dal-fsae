@@ -1,4 +1,4 @@
-Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
+Core/Src/app_main.o: ../Core/Src/app_main.c ../Core/Inc/app_main.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h \
  ../Core/Inc/stm32f4xx_hal_conf.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc.h \
@@ -33,8 +33,8 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h \
  ../Core/Inc/TIM.h ../Core/Inc/PEDAL_PLAUSIBILITY.h \
- ../Core/Inc/DRIVER_IO.h ../Core/Inc/app_main.h
-../Core/Inc/main.h:
+ ../Core/Inc/DRIVER_IO.h
+../Core/Inc/app_main.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h:
 ../Core/Inc/stm32f4xx_hal_conf.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc.h:
@@ -71,4 +71,3 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
 ../Core/Inc/TIM.h:
 ../Core/Inc/PEDAL_PLAUSIBILITY.h:
 ../Core/Inc/DRIVER_IO.h:
-../Core/Inc/app_main.h:

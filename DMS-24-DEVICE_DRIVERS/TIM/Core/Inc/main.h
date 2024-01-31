@@ -49,6 +49,8 @@ extern "C" {
 
 /* USER CODE END EM */
 
+void HAL_TIM_MspPostInit(TIM_HandleTypeDef *htim);
+
 /* Exported functions prototypes ---------------------------------------------*/
 void Error_Handler(void);
 
@@ -69,20 +71,56 @@ void Error_Handler(void);
 #define PH1_OSC_OUT_GPIO_Port GPIOH
 #define OTG_FS_PowerSwitchOn_Pin GPIO_PIN_0
 #define OTG_FS_PowerSwitchOn_GPIO_Port GPIOC
+#define CURRENT_SENS_Pin GPIO_PIN_1
+#define CURRENT_SENS_GPIO_Port GPIOC
 #define PDM_OUT_Pin GPIO_PIN_3
 #define PDM_OUT_GPIO_Port GPIOC
 #define B1_Pin GPIO_PIN_0
 #define B1_GPIO_Port GPIOA
+#define B1_EXTI_IRQn EXTI0_IRQn
+#define MC_DAC_OUT_Pin GPIO_PIN_4
+#define MC_DAC_OUT_GPIO_Port GPIOA
 #define SPI1_SCK_Pin GPIO_PIN_5
 #define SPI1_SCK_GPIO_Port GPIOA
 #define SPI1_MISO_Pin GPIO_PIN_6
 #define SPI1_MISO_GPIO_Port GPIOA
 #define SPI1_MOSI_Pin GPIO_PIN_7
 #define SPI1_MOSI_GPIO_Port GPIOA
+#define F_BPS_ADC_Pin GPIO_PIN_0
+#define F_BPS_ADC_GPIO_Port GPIOB
+#define R_BPS_ADC_Pin GPIO_PIN_1
+#define R_BPS_ADC_GPIO_Port GPIOB
 #define BOOT1_Pin GPIO_PIN_2
 #define BOOT1_GPIO_Port GPIOB
+#define FWRD_SWITCH_Pin GPIO_PIN_7
+#define FWRD_SWITCH_GPIO_Port GPIOE
+#define RVES_SWITCH_Pin GPIO_PIN_8
+#define RVES_SWITCH_GPIO_Port GPIOE
+#define FWRD_DRIVE_SNGL_Pin GPIO_PIN_9
+#define FWRD_DRIVE_SNGL_GPIO_Port GPIOE
+#define RVRS_DRIVE_SNGL_Pin GPIO_PIN_10
+#define RVRS_DRIVE_SNGL_GPIO_Port GPIOE
+#define RTD_LED_Pin GPIO_PIN_11
+#define RTD_LED_GPIO_Port GPIOE
+#define BREAK_RELAY_Pin GPIO_PIN_12
+#define BREAK_RELAY_GPIO_Port GPIOE
+#define EXTERNAL_RELAY_Pin GPIO_PIN_13
+#define EXTERNAL_RELAY_GPIO_Port GPIOE
+#define RTDS_SNGL_Pin GPIO_PIN_14
+#define RTDS_SNGL_GPIO_Port GPIOE
 #define CLK_IN_Pin GPIO_PIN_10
 #define CLK_IN_GPIO_Port GPIOB
+#define VCU_FAULT_OUT_Pin GPIO_PIN_15
+#define VCU_FAULT_OUT_GPIO_Port GPIOB
+#define AAC_FAULT_Pin GPIO_PIN_8
+#define AAC_FAULT_GPIO_Port GPIOD
+#define AAC_FAULT_EXTI_IRQn EXTI9_5_IRQn
+#define PAG_FAULT_Pin GPIO_PIN_9
+#define PAG_FAULT_GPIO_Port GPIOD
+#define PAG_FAULT_EXTI_IRQn EXTI9_5_IRQn
+#define SPA_FAULT_Pin GPIO_PIN_10
+#define SPA_FAULT_GPIO_Port GPIOD
+#define SPA_FAULT_EXTI_IRQn EXTI15_10_IRQn
 #define LD4_Pin GPIO_PIN_12
 #define LD4_GPIO_Port GPIOD
 #define LD3_Pin GPIO_PIN_13
@@ -91,8 +129,14 @@ void Error_Handler(void);
 #define LD5_GPIO_Port GPIOD
 #define LD6_Pin GPIO_PIN_15
 #define LD6_GPIO_Port GPIOD
+#define BATT_FAN_PWM_Pin GPIO_PIN_6
+#define BATT_FAN_PWM_GPIO_Port GPIOC
 #define I2S3_MCK_Pin GPIO_PIN_7
 #define I2S3_MCK_GPIO_Port GPIOC
+#define MOTOR_FAN_PWM_Pin GPIO_PIN_8
+#define MOTOR_FAN_PWM_GPIO_Port GPIOC
+#define MOTOR_PUMP_PWM_Pin GPIO_PIN_9
+#define MOTOR_PUMP_PWM_GPIO_Port GPIOC
 #define VBUS_FS_Pin GPIO_PIN_9
 #define VBUS_FS_GPIO_Port GPIOA
 #define OTG_FS_ID_Pin GPIO_PIN_10

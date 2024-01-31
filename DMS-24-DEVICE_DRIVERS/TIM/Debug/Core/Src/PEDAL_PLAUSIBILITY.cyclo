@@ -1,2 +1,3 @@
 ../Core/Src/PEDAL_PLAUSIBILITY.c:22:19:PDP_PedealAgreement	7
-../Core/Src/PEDAL_PLAUSIBILITY.c:49:19:PDP_AppsAgreement	2
+../Core/Src/PEDAL_PLAUSIBILITY.c:47:19:PDP_AppsAgreement	2
+../Core/Src/PEDAL_PLAUSIBILITY.c:61:19:PDP_ThresholdCheck	3
