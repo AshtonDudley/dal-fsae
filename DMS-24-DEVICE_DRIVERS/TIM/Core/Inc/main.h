@@ -86,8 +86,10 @@ void Error_Handler(void);
 #define SPI1_MISO_GPIO_Port GPIOA
 #define SPI1_MOSI_Pin GPIO_PIN_7
 #define SPI1_MOSI_GPIO_Port GPIOA
-#define RPBS_SENS_Pin GPIO_PIN_1
-#define RPBS_SENS_GPIO_Port GPIOB
+#define F_BPS_ADC_Pin GPIO_PIN_0
+#define F_BPS_ADC_GPIO_Port GPIOB
+#define R_BPS_ADC_Pin GPIO_PIN_1
+#define R_BPS_ADC_GPIO_Port GPIOB
 #define BOOT1_Pin GPIO_PIN_2
 #define BOOT1_GPIO_Port GPIOB
 #define FWRD_SWITCH_Pin GPIO_PIN_7
@@ -102,8 +104,8 @@ void Error_Handler(void);
 #define RTD_LED_GPIO_Port GPIOE
 #define BREAK_RELAY_Pin GPIO_PIN_12
 #define BREAK_RELAY_GPIO_Port GPIOE
-#define PUMP_RELAY_Pin GPIO_PIN_13
-#define PUMP_RELAY_GPIO_Port GPIOE
+#define EXTERNAL_RELAY_Pin GPIO_PIN_13
+#define EXTERNAL_RELAY_GPIO_Port GPIOE
 #define RTDS_SNGL_Pin GPIO_PIN_14
 #define RTDS_SNGL_GPIO_Port GPIOE
 #define CLK_IN_Pin GPIO_PIN_10
@@ -157,8 +159,6 @@ void Error_Handler(void);
 #define OTG_FS_OverCurrent_GPIO_Port GPIOD
 #define SWO_Pin GPIO_PIN_3
 #define SWO_GPIO_Port GPIOB
-#define BRAKELIGHT_PWM_Pin GPIO_PIN_5
-#define BRAKELIGHT_PWM_GPIO_Port GPIOB
 #define Audio_SCL_Pin GPIO_PIN_6
 #define Audio_SCL_GPIO_Port GPIOB
 #define Audio_SDA_Pin GPIO_PIN_9

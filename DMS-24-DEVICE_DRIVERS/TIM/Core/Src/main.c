@@ -492,10 +492,6 @@ static void MX_TIM3_Init(void)
   {
     Error_Handler();
   }
-  if (HAL_TIM_PWM_ConfigChannel(&htim3, &sConfigOC, TIM_CHANNEL_2) != HAL_OK)
-  {
-    Error_Handler();
-  }
   if (HAL_TIM_PWM_ConfigChannel(&htim3, &sConfigOC, TIM_CHANNEL_3) != HAL_OK)
   {
     Error_Handler();
@@ -632,7 +628,7 @@ static void MX_GPIO_Init(void)
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOE, CS_I2C_SPI_Pin|FWRD_DRIVE_SNGL_Pin|RVRS_DRIVE_SNGL_Pin|RTD_LED_Pin
-                          |BREAK_RELAY_Pin|PUMP_RELAY_Pin|RTDS_SNGL_Pin, GPIO_PIN_RESET);
+                          |BREAK_RELAY_Pin|EXTERNAL_RELAY_Pin|RTDS_SNGL_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(OTG_FS_PowerSwitchOn_GPIO_Port, OTG_FS_PowerSwitchOn_Pin, GPIO_PIN_SET);
@@ -648,9 +644,9 @@ static void MX_GPIO_Init(void)
                           |Audio_RST_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pins : CS_I2C_SPI_Pin FWRD_DRIVE_SNGL_Pin RVRS_DRIVE_SNGL_Pin RTD_LED_Pin
-                           BREAK_RELAY_Pin PUMP_RELAY_Pin RTDS_SNGL_Pin */
+                           BREAK_RELAY_Pin EXTERNAL_RELAY_Pin RTDS_SNGL_Pin */
   GPIO_InitStruct.Pin = CS_I2C_SPI_Pin|FWRD_DRIVE_SNGL_Pin|RVRS_DRIVE_SNGL_Pin|RTD_LED_Pin
-                          |BREAK_RELAY_Pin|PUMP_RELAY_Pin|RTDS_SNGL_Pin;
+                          |BREAK_RELAY_Pin|EXTERNAL_RELAY_Pin|RTDS_SNGL_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
