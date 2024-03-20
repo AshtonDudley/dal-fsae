@@ -628,7 +628,7 @@ static void MX_GPIO_Init(void)
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOE, CS_I2C_SPI_Pin|FWRD_DRIVE_SNGL_Pin|RVRS_DRIVE_SNGL_Pin|RTD_LED_Pin
-                          |BREAK_RELAY_Pin|EXTERNAL_RELAY_Pin|RTDS_SNGL_Pin, GPIO_PIN_RESET);
+                          |BREAK_RELAY_Pin|EXTERNAL_RELAY_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(OTG_FS_PowerSwitchOn_GPIO_Port, OTG_FS_PowerSwitchOn_Pin, GPIO_PIN_SET);
@@ -644,9 +644,9 @@ static void MX_GPIO_Init(void)
                           |Audio_RST_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pins : CS_I2C_SPI_Pin FWRD_DRIVE_SNGL_Pin RVRS_DRIVE_SNGL_Pin RTD_LED_Pin
-                           BREAK_RELAY_Pin EXTERNAL_RELAY_Pin RTDS_SNGL_Pin */
+                           BREAK_RELAY_Pin EXTERNAL_RELAY_Pin */
   GPIO_InitStruct.Pin = CS_I2C_SPI_Pin|FWRD_DRIVE_SNGL_Pin|RVRS_DRIVE_SNGL_Pin|RTD_LED_Pin
-                          |BREAK_RELAY_Pin|EXTERNAL_RELAY_Pin|RTDS_SNGL_Pin;
+                          |BREAK_RELAY_Pin|EXTERNAL_RELAY_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
@@ -692,6 +692,12 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOE, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : RTDS_SNGL_Pin */
+  GPIO_InitStruct.Pin = RTDS_SNGL_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Pull = GPIO_PULLDOWN;
+  HAL_GPIO_Init(RTDS_SNGL_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pin : CLK_IN_Pin */
   GPIO_InitStruct.Pin = CLK_IN_Pin;
